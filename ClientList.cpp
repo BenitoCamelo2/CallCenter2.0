@@ -9,7 +9,7 @@ bool ClientList::isValidPos(ClientNode *clientNode) {
         if(temp == clientNode){
             return true;
         }
-        temp = temp->getNext();
+        temp = getNextPos(temp);
     }
     return false;
 }
@@ -32,7 +32,7 @@ string ClientList::toString() {
         result += temp->getData().toString();
         result += "\n";
 
-        temp = temp->getNext();
+        temp = getNextPos(temp);
     }
     return result;
 }
@@ -63,20 +63,22 @@ void ClientList::insertOrdered(Client& client){
 
     while(aux != nullptr && client > aux->getData()){
         temp = aux;
-        aux = aux->getNext();
+        aux = getNextPos(aux);
     }
     insertData(temp, client);
 }
 
-//-------------------
+//Entregable 5
 
 void ClientList::deleteData(ClientNode *clientNode) {
     ClientNode* temp;
     ClientNode* trail;
+    ClientNode* last;
 
+    last = getLastPos();
     temp = header;
     trail = nullptr;
-    if(temp->getNext() == nullptr){
+    if(temp == last){
         if(temp == clientNode){
             delete temp;
             header = new ClientNode();
@@ -84,37 +86,67 @@ void ClientList::deleteData(ClientNode *clientNode) {
     } else {
         while(temp != nullptr && temp != clientNode){
             trail = temp;
-            temp = temp->getNext();
+            temp = getNextPos(temp);
         }
         if(temp != nullptr){
-            trail = temp->getNext();
+            trail = getNextPos(temp);
             delete temp;
         }
     }
 }
 
 void ClientList::copyAll(const ClientList &clientList) {
-//
+    ClientNode* temp1;
+    ClientNode* temp2;
+    temp1 = clientList.header;
+    header = temp1;
+    if(!isEmpty()){
+        temp2 = header;
+        while(temp1 != nullptr){
+            temp1 = getNextPos(temp1);
+            temp2->setNext(temp1);
+            temp2 = getNextPos(temp2);
+        }
+    } else {
+        delete header;
+    }
 }
 
 ClientNode *ClientList::getFirstPos() {
-    return header;
+    if(!isEmpty()){
+        return header;
+    }
 }
 
 ClientNode *ClientList::getLastPos() {
-    return nullptr;
+    ClientNode* temp;
+    temp = header;
+    if(!isEmpty()){
+        if(getNextPos(temp) == nullptr){
+            return temp;
+        } else {
+            while(temp != nullptr){
+                if(getNextPos(temp) == nullptr){
+                    return temp;
+                } else {
+                    temp = getNextPos(temp);
+                }
+            }
+        }
+    }
 }
 
-ClientNode *ClientList::getNextPos() {
-    return nullptr;
+ClientNode *ClientList::getNextPos(ClientNode* clientNode) {
+    return clientNode->getNext();
 }
 
 ClientNode *ClientList::retrievePos(Client& client) {
     ClientNode* temp;
+    ClientNode* last;
 
+    last = getLastPos();
     temp = header;
-
-    if(temp->getNext() == nullptr){
+    if(temp == last){
         if(temp->getData().getPhoneNumber() == client.getPhoneNumber()){
             return temp;
         } else {
@@ -125,7 +157,7 @@ ClientNode *ClientList::retrievePos(Client& client) {
             if(temp->getData().getPhoneNumber() == client.getPhoneNumber()){
                 return temp;
             }
-            temp = temp->getNext();
+            temp = getNextPos(temp);
         }while(temp != nullptr);
     }
     return nullptr;
@@ -133,13 +165,15 @@ ClientNode *ClientList::retrievePos(Client& client) {
 
 Client ClientList::findData(ClientNode *clientNode) {
     ClientNode* temp;
-    Client tempClient = Client();
+    ClientNode* last;
 
-    tempClient.setPhoneNumber(0);
-
+    last = getLastPos();
     temp = header;
 
-    if(temp->getNext() == nullptr){
+    Client tempClient = Client();
+    tempClient.setPhoneNumber(0);
+
+    if(temp == last){
         if(temp == clientNode){
             return temp->getData();
         } else {
@@ -150,7 +184,7 @@ Client ClientList::findData(ClientNode *clientNode) {
             if(temp == clientNode){
                 return temp->getData();
             }
-            temp = temp->getNext();
+            temp = getNextPos(temp);
         }
     }
     return tempClient;
@@ -161,16 +195,18 @@ Client ClientList::findData(ClientNode *clientNode) {
 void ClientList::deleteAll() {
     ClientNode* temp;
     ClientNode* trail;
+    ClientNode* last;
 
+    last = getLastPos();
     temp = header;
     trail = nullptr;
-    if(temp->getNext() == nullptr){
+    if(temp == last){
         delete temp;
         header = new ClientNode();
     } else {
         while(temp != nullptr){
             trail = temp;
-            temp = temp->getNext();
+            temp = getNextPos(temp);
             delete trail;
         }
         delete temp;

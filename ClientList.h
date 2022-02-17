@@ -23,7 +23,7 @@ public:
     void deleteData(ClientNode* clientNode);
     ClientNode* getFirstPos();
     ClientNode* getLastPos();
-    ClientNode* getNextPos();
+    ClientNode* getNextPos(ClientNode* clientNode);
     ClientNode* retrievePos(Client& client);
     Client findData(ClientNode* clientNode);
     string toString();
