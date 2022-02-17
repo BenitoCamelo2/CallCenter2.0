@@ -5,8 +5,7 @@
 using namespace std;
 
 Client createClient();
-void deleteClient();
-void deleteAllClients();
+void searchClient(ClientList *clientList);
 
 int main() {
     ClientList* clientList = new ClientList();
@@ -18,7 +17,8 @@ int main() {
         cout << "1. Add" << endl;
         cout << "2. Delete" << endl;
         cout << "3. Delete all" << endl;
-        cout << "4. Exit" << endl;
+        cout << "4. Search" << endl;
+        cout << "5. Exit" << endl;
         cout << "Option: ";
         cin >> opc;
         switch(opc){
@@ -33,9 +33,14 @@ int main() {
                 break;
             }
             case 3: {
-                deleteAllClients();
+                clientList->deleteAll();
+                break;
             }
             case 4: {
+                searchClient(clientList);
+                break;
+            }
+            case 5: {
                 terminate = true;
                 break;
             }
@@ -77,10 +82,21 @@ Client createClient(){
     return tempClient;
 }
 
-void deleteClient(){
-
+void searchClient(ClientList* clientList){
+    Client tempClient1 = Client();
+    Client tempClient2 = Client();
+    ClientNode* tempClientNode = new ClientNode();
+    int phoneNumber;
+    cout << "Phonenumber: ";
+    cin >> phoneNumber;
+    tempClient1.setPhoneNumber(phoneNumber);
+    tempClientNode = clientList->retrievePos(tempClient1);
+    if(tempClientNode != nullptr){
+        cout << "Data found" << endl;
+        tempClient2 = clientList->findData(tempClientNode);
+        cout << "Phonenumber: " << tempClient2.getPhoneNumber() << endl;
+    } else {
+        cout << "Data not found" << endl;
+    }
 }
 
-void deleteAllClients(){
-
-}

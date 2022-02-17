@@ -37,6 +37,10 @@ void Client::setData(const int &phoneNumber, const Time &callStart, const Time &
     this->callDate = callDate;
 }
 
+void Client::setPhoneNumber(const int &phoneNumber) {
+    this->phoneNumber = phoneNumber;
+}
+
 string Client::toString(){
     string result;
 

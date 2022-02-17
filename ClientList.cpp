@@ -82,14 +82,13 @@ void ClientList::deleteData(ClientNode *clientNode) {
             header = new ClientNode();
         }
     } else {
-        while(temp->getNext() != nullptr){
-            if(temp == clientNode){
-                trail = temp->getNext();
-                delete temp;
-            } else {
-                trail = temp;
-                temp = temp->getNext();
-            }
+        while(temp != nullptr && temp != clientNode){
+            trail = temp;
+            temp = temp->getNext();
+        }
+        if(temp != nullptr){
+            trail = temp->getNext();
+            delete temp;
         }
     }
 }
@@ -110,12 +109,51 @@ ClientNode *ClientList::getNextPos() {
     return nullptr;
 }
 
-ClientNode *ClientList::findData(const Client &client) {
+ClientNode *ClientList::retrievePos(Client& client) {
+    ClientNode* temp;
+
+    temp = header;
+
+    if(temp->getNext() == nullptr){
+        if(temp->getData().getPhoneNumber() == client.getPhoneNumber()){
+            return temp;
+        } else {
+            return nullptr;
+        }
+    } else {
+        do{
+            if(temp->getData().getPhoneNumber() == client.getPhoneNumber()){
+                return temp;
+            }
+            temp = temp->getNext();
+        }while(temp != nullptr);
+    }
     return nullptr;
 }
 
-Client ClientList::retrievePos(ClientNode *clientNode) {
-    return Client();
+Client ClientList::findData(ClientNode *clientNode) {
+    ClientNode* temp;
+    Client tempClient = Client();
+
+    tempClient.setPhoneNumber(0);
+
+    temp = header;
+
+    if(temp->getNext() == nullptr){
+        if(temp == clientNode){
+            return temp->getData();
+        } else {
+            return tempClient;
+        }
+    } else {
+        while(temp != nullptr){
+            if(temp == clientNode){
+                return temp->getData();
+            }
+            temp = temp->getNext();
+        }
+    }
+    return tempClient;
 }
 
 
@@ -130,11 +168,12 @@ void ClientList::deleteAll() {
         delete temp;
         header = new ClientNode();
     } else {
-        while(temp->getNext() != nullptr){
+        while(temp != nullptr){
             trail = temp;
             temp = temp->getNext();
             delete trail;
         }
+        delete temp;
     }
 }
 

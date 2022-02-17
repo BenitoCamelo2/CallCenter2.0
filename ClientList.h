@@ -24,8 +24,8 @@ public:
     ClientNode* getFirstPos();
     ClientNode* getLastPos();
     ClientNode* getNextPos();
-    ClientNode* findData(const Client& client);
-    Client retrievePos(ClientNode* clientNode);
+    ClientNode* retrievePos(Client& client);
+    Client findData(ClientNode* clientNode);
     string toString();
     void deleteAll();
     void writeToDisk(const string data);
