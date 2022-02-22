@@ -1,4 +1,5 @@
 #include "ClientList.h"
+#include "util.h"
 
 //Entregable 4
 
@@ -95,6 +96,56 @@ void ClientList::deleteData(ClientNode *clientNode) {
     }
 }
 
+void ClientList::showAllData() {
+    ClientNode* temp(header);
+    ClientNode* last = getLastPos();
+    if(temp == last){
+        showData(temp);
+    } else {
+        while(temp != nullptr){
+            showData(temp);
+            temp = getNextPos(temp);
+        }
+    }
+
+}
+
+void ClientList::showData(ClientNode *clientNode) {
+    ClientNode* temp;
+    ClientNode* last;
+
+    last = getLastPos();
+    temp = header;
+    if(temp == last){
+        if(temp == clientNode){
+            cout << "|" << temp->getData().getPhoneNumber();
+            cout.width(20 - countDigits(temp->getData().getPhoneNumber()));
+            cout << "|" << temp->getData().getCallDate().toString();
+            cout.width(20 - temp->getData().getCallDate().toString().length());
+            cout << "|" << temp->getData().getCallStart().toString();
+            cout.width(23 - temp->getData().getCallStart().toString().length());
+            cout << "|" << temp->getData().getCallDuration().toString();
+            cout.width(20 - temp->getData().getCallDuration().toString().length());
+            cout << "|" << endl;
+        }
+    } else {
+        while(temp != nullptr){
+            if(temp == clientNode){
+                cout << "|" << temp->getData().getPhoneNumber();
+                cout.width(20 - countDigits(temp->getData().getPhoneNumber()));
+                cout << "|" << temp->getData().getCallDate().toString();
+                cout.width(20 - temp->getData().getCallDate().toString().length());
+                cout << "|" << temp->getData().getCallStart().toString();
+                cout.width(23 - temp->getData().getCallStart().toString().length());
+                cout << "|" << temp->getData().getCallDuration().toString();
+                cout.width(20 - temp->getData().getCallDuration().toString().length());
+                cout << "|" << endl;
+            }
+            temp = getNextPos(temp);
+        }
+    }
+}
+
 void ClientList::copyAll(const ClientList &clientList) {
     ClientNode* temp1;
     ClientNode* temp2;
@@ -140,27 +191,91 @@ ClientNode *ClientList::getNextPos(ClientNode* clientNode) {
     return clientNode->getNext();
 }
 
-ClientNode *ClientList::retrievePos(Client& client) {
+ClientNode *ClientList::retrievePos(Client& client, int searchBy) {
     ClientNode* temp;
     ClientNode* last;
 
     last = getLastPos();
     temp = header;
-    if(temp == last){
-        if(temp->getData().getPhoneNumber() == client.getPhoneNumber()){
-            return temp;
-        } else {
+    switch(searchBy){
+        case 1:{
+            if(temp == last){
+                if(temp->getData().getPhoneNumber() == client.getPhoneNumber()){
+                    return temp;
+                } else {
+                    return nullptr;
+                }
+            } else {
+                do{
+                    if(temp->getData().getPhoneNumber() == client.getPhoneNumber()){
+                        return temp;
+                    }
+                    temp = getNextPos(temp);
+                }while(temp != nullptr);
+            }
             return nullptr;
         }
-    } else {
-        do{
-            if(temp->getData().getPhoneNumber() == client.getPhoneNumber()){
-                return temp;
+        case 2:{
+            Date tempDate = client.getCallDate();
+            if(temp == last){
+                if(temp->getData().getCallDate().operator==(tempDate)){
+                    return temp;
+                } else {
+                    return nullptr;
+                }
+            } else {
+                do{
+                    if(temp->getData().getCallDate().operator==(tempDate)){
+                        return temp;
+                    }
+                    temp = getNextPos(temp);
+                }while(temp != nullptr);
             }
-            temp = getNextPos(temp);
-        }while(temp != nullptr);
+            return nullptr;
+        }
+        case 3:{
+            Time callStart = client.getCallStart();
+            if(temp == last){
+                if(temp->getData().getCallStart().operator==(callStart)){
+                    return temp;
+                } else {
+                    return nullptr;
+                }
+            } else {
+                do{
+                    if(temp->getData().getCallStart().operator==(callStart)){
+                        return temp;
+                    }
+                    temp = getNextPos(temp);
+                }while(temp != nullptr);
+            }
+            return nullptr;
+        }
+        case 4:{
+            Time callDuration = client.getCallDuration();
+            if(temp == last){
+                if(temp->getData().getCallDuration().operator==(callDuration)){
+                    return temp;
+                } else {
+                    return nullptr;
+                }
+            } else {
+                do{
+                    if(temp->getData().getCallDuration().operator==(callDuration)){
+                        return temp;
+                    }
+                    temp = getNextPos(temp);
+                }while(temp != nullptr);
+            }
+            return nullptr;
+        }
+        default: {
+            cout << "Presiona enter para continuar..." << endl;
+            getchar();
+            break;
+        }
     }
-    return nullptr;
+
 }
 
 Client ClientList::findData(ClientNode *clientNode) {
@@ -214,7 +329,6 @@ void ClientList::deleteAll() {
 }
 
 void ClientList::writeToDisk(const string data) {
-
 }
 
 string ClientList::readFromDisk() {

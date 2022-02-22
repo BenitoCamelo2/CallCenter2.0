@@ -12,9 +12,7 @@ enum opcionesSplash{
     SPLASH_WRITE
 };
 
-class util {
-
-};
+int countDigits(int n);
 
 
 #endif //PROGRAMA_UTIL_H

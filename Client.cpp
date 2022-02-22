@@ -41,10 +41,22 @@ void Client::setPhoneNumber(const int &phoneNumber) {
     this->phoneNumber = phoneNumber;
 }
 
+void Client::setCallStart(const Time &callStart) {
+    this->callStart = callStart;
+}
+
+void Client::setCallDuration(const Time &callDuration) {
+    this->callDuration = callDuration;
+}
+
+void Client::setCallDate(const Date &callDate) {
+    this->callDate = callDate;
+}
+
 string Client::toString(){
     string result;
 
-    result = phoneNumber;
+    result = to_string(phoneNumber);
     result += " | ";
     result += callStart.toString();
     result += " | ";

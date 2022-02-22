@@ -23,6 +23,9 @@ public:
     Date getCallDate();
     void setData(const int& phoneNumber, const Time& callStart, const Time& callDuration, const Date& callDate);
     void setPhoneNumber(const int& phoneNumber);
+    void setCallStart(const Time& callStart);
+    void setCallDuration(const Time& callDuration);
+    void setCallDate(const Date& callDate);
     string toString();
     Client& operator = (const Client& client);
     bool operator == (const Client& client);

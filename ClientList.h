@@ -21,14 +21,16 @@ public:
     void insertData(ClientNode* clientNode, const Client& client);
     void insertOrdered(Client& client);
     void deleteData(ClientNode* clientNode);
+    void showData(ClientNode* clientNode);
+    void showAllData();
     ClientNode* getFirstPos();
     ClientNode* getLastPos();
     ClientNode* getNextPos(ClientNode* clientNode);
-    ClientNode* retrievePos(Client& client);
+    ClientNode* retrievePos(Client& client, int searchBy);
     Client findData(ClientNode* clientNode);
     string toString();
     void deleteAll();
-    void writeToDisk(const string data);
+    void writeToDisk(string data);
     string readFromDisk();
 };
 

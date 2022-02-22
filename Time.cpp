@@ -40,7 +40,11 @@ void Time::setData(const int &h, const int &m) {
 }
 
 string Time::toString() {
-    return to_string(hour * 100 + minute);
+    string result;
+    result += to_string(hour);
+    result += ":";
+    result += to_string(minute);
+    return result;
 }
 
 Time &Time::operator = (const Time &t) {

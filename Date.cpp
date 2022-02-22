@@ -72,11 +72,11 @@ bool Date::setData(const int &y, const int &m, const int &d) {
 
 string Date::toString() {
     string result;
-    result = day;
+    result = to_string(day);
     result += "/";
-    result += month;
+    result += to_string(month);
     result += "/";
-    result += year;
+    result += to_string(year);
 
     return result;
 }

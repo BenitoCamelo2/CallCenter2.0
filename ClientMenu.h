@@ -10,15 +10,14 @@ using namespace std;
 class ClientMenu {
 private:
     ClientList* clientListRef;
+    static void enterToContinue();
+    void addClient();
+    void deleteClient();
+    void modifyClient();
+    void searchClient();
+    void mainMenu();
 public:
-    //ClientMenu();
-    //~ClientMenu();
-
-    //void enterToContinue();
-    //void addClient();
-    //void deleteClient();
-    //void modifyClient();
-    //void showClients();
+    ClientMenu(ClientList* clientList);
 };
 
 
