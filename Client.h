@@ -10,19 +10,19 @@ using namespace std;
 
 class Client {
 private:
-    int phoneNumber;
+    long long phoneNumber;
     Time callDuration;
     Time callStart;
     Date callDate;
 public:
     Client();
-    Client(const int& phoneNumber, const Time& callStart, const Time& callDuration, const Date& callDate);
-    int getPhoneNumber();
+    Client(const long long& phoneNumber, const Time& callStart, const Time& callDuration, const Date& callDate);
+    long long getPhoneNumber();
     Time getCallStart();
     Time getCallDuration();
     Date getCallDate();
-    void setData(const int& phoneNumber, const Time& callStart, const Time& callDuration, const Date& callDate);
-    void setPhoneNumber(const int& phoneNumber);
+    void setData(const long long& phoneNumber, const Time& callStart, const Time& callDuration, const Date& callDate);
+    void setPhoneNumber(const long long& phoneNumber);
     void setCallStart(const Time& callStart);
     void setCallDuration(const Time& callDuration);
     void setCallDate(const Date& callDate);

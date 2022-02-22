@@ -305,8 +305,6 @@ Client ClientList::findData(ClientNode *clientNode) {
     return tempClient;
 }
 
-
-
 void ClientList::deleteAll() {
     ClientNode* temp;
     ClientNode* trail;

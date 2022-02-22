@@ -7,14 +7,14 @@ Client::Client() {
     callDate = Date();
 }
 
-Client::Client(const int &phoneNumber, const Time &callStart, const Time &callDuration, const Date &callDate) {
+Client::Client(const long long &phoneNumber, const Time &callStart, const Time &callDuration, const Date &callDate) {
     this->phoneNumber = phoneNumber;
     this->callStart = callStart;
     this->callDuration = callDuration;
     this->callDate = callDate;
 }
 
-int Client::getPhoneNumber() {
+long long Client::getPhoneNumber() {
     return phoneNumber;
 }
 
@@ -30,14 +30,14 @@ Date Client::getCallDate() {
     return callDate;
 }
 
-void Client::setData(const int &phoneNumber, const Time &callStart, const Time &callDuration, const Date &callDate) {
+void Client::setData(const long long &phoneNumber, const Time &callStart, const Time &callDuration, const Date &callDate) {
     this->phoneNumber = phoneNumber;
     this->callStart = callStart;
     this->callDuration = callDuration;
     this->callDate = callDate;
 }
 
-void Client::setPhoneNumber(const int &phoneNumber) {
+void Client::setPhoneNumber(const long long &phoneNumber) {
     this->phoneNumber = phoneNumber;
 }
 

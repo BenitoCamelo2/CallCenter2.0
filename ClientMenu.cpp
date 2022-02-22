@@ -21,7 +21,8 @@ void ClientMenu::enterToContinue() {
 
 void ClientMenu::addClient() {
     Client tempClient;
-    int clientPhoneNumber, minute, hour, year, day, month;
+    int minute, hour, year, day, month;
+    long long clientPhoneNumber;
     Time clientCallDuration, clientCallStart;
     Date clientCallDate;
     system("cls");
@@ -52,9 +53,9 @@ void ClientMenu::addClient() {
 void ClientMenu::deleteClient() {
     Client tempClient1 = Client();
     ClientNode* tempClientNode;
-    int phoneNumber;
+    long long phoneNumber;
     cout << "ELIMINAR CLIENTE" << endl;
-    cout << "Phonenumber: ";
+    cout << "Numero telefonico: ";
     cin >> phoneNumber;
     tempClient1.setPhoneNumber(phoneNumber);
     tempClientNode = clientListRef->retrievePos(tempClient1, 1);
@@ -80,7 +81,7 @@ void ClientMenu::deleteClient() {
 void ClientMenu::modifyClient() {
     Client tempClient1 = Client();
     ClientNode* tempClientNode;
-    int phoneNumber;
+    long long phoneNumber;
     system("cls");
     cout << "MODIFICAR CLIENTE" << endl;
     cout << "Numero telefonico: ";
@@ -101,7 +102,7 @@ void ClientMenu::modifyClient() {
         cin >> opc;
         switch(opc){
             case 1: {
-                int clientPhoneNumber;
+                long long clientPhoneNumber;
                 tempClient1 = tempClientNode->getData();
                 cout << "Numero telefonico nuevo: ";
                 cin >> clientPhoneNumber;
@@ -177,7 +178,7 @@ void ClientMenu::searchClient() {
 
     switch(opc){
         case 1: {
-            int phoneNumber;
+            long long phoneNumber;
             Client tempClient = Client();
             ClientNode* tempClientNode = new ClientNode();
             cout << "Numero telefonico: ";
@@ -315,6 +316,8 @@ void ClientMenu::mainMenu() {
                 break;
             }
             case SHOW_CLIENTS: {
+                system("cls");
+                cout << "MOSTRAR CLIENTES" << endl;
                 cout << "|Numero Telefonico  |Fecha de llamada   |Hora inicio de llamada|Duracion de llamada|" << endl;
                 clientListRef->showAllData();
                 cin.ignore();
