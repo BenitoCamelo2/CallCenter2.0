@@ -74,25 +74,23 @@ void ClientList::insertOrdered(Client& client){
 void ClientList::deleteData(ClientNode *clientNode) {
     ClientNode* temp;
     ClientNode* trail;
-    ClientNode* last;
 
-    last = getLastPos();
     temp = header;
     trail = nullptr;
-    if(temp == last){
-        if(temp == clientNode){
-            delete temp;
-            header = new ClientNode();
-        }
+    if(temp != nullptr && temp == clientNode){
+        delete temp;
+        header = new ClientNode();
     } else {
-        while(temp != nullptr && temp != clientNode){
-            trail = temp;
-            temp = getNextPos(temp);
+        while(temp != nullptr){
+            if(temp == clientNode){
+                trail->setNext(getNextPos(temp));
+                temp = nullptr;
+            } else {
+                trail = temp;
+                temp = getNextPos(temp);
+            }
         }
-        if(temp != nullptr){
-            trail = getNextPos(temp);
-            delete temp;
-        }
+        delete temp;
     }
 }
 
