@@ -1,8 +1,6 @@
 #include "ClientList.h"
 #include "util.h"
 
-//Entregable 4
-
 bool ClientList::isValidPos(ClientNode *clientNode) {
     ClientNode* temp(header);
 
@@ -68,8 +66,6 @@ void ClientList::insertOrdered(Client& client){
     }
     insertData(temp, client);
 }
-
-//Entregable 5
 
 void ClientList::deleteData(ClientNode *clientNode) {
     ClientNode* temp;
