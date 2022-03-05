@@ -1,5 +1,17 @@
-//
-// Created by Benito on 03/02/2022.
-//
-
 #include "AgentNodeException.h"
+
+AgentNodeException::AgentNodeException(const char message) {
+
+}
+
+AgentNodeException::AgentNodeException(const string message) {
+
+}
+
+AgentNodeException::~AgentNodeException() {
+
+}
+
+const char *AgentNodeException::what() {
+    return nullptr;
+}

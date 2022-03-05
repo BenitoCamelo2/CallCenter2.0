@@ -9,22 +9,22 @@ using namespace std;
 
 class AgentNode {
 private:
-    Agent* dataPtr;
+    Agent* dataPTR;
     AgentNode* prev;
     AgentNode* next;
 public:
-    //AgentNode();
-    //AgentNode(const Agent& agent);
-    //~AgentNode();
+    AgentNode();
+    AgentNode(const Agent& agent);
+    ~AgentNode();
 
-    //Agent* getDataPtr();
-    //Agent getData();
-    //AgentNode* getPrev();
-    //AgentNode* getNext();
-    //void setDataPtr(Agent* agent);
-    //void setData(const Agent& agent);
-    //void setPrev(AgentNode* agentNode);
-    //void setNext(AgentNode* agentNode);
+    Agent* getDataPtr();
+    Agent getData();
+    AgentNode* getPrev();
+    AgentNode* getNext();
+    void setDataPtr(Agent* agent);
+    void setData(const Agent& agent);
+    void setPrev(AgentNode* agentNode);
+    void setNext(AgentNode* agentNode);
 };
 
 

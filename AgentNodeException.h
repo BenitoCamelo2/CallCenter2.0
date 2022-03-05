@@ -9,10 +9,10 @@ class AgentNodeException {
 private:
     string msg;
 public:
-    //AgentNodeException(const char message);
-    //AgentNodeException(const string message);
-    //~AgentNodeException();
-    //const char* what();
+    AgentNodeException(const char message);
+    AgentNodeException(const string message);
+    ~AgentNodeException();
+    const char* what();
 };
 
 
