@@ -5,14 +5,13 @@
 
 #include "AgentList.h"
 #include "ClientList.h"
+#include "ClientMenu.h"
+#include "AgentMenu.h"
 
 using namespace std;
 
 class MainMenu {
 private:
-    AgentList* agentListRef;
-    ClientList* clientListRef;
-public:
     //MainMenu();
     //~MainMenu();
 
