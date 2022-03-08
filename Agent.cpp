@@ -73,6 +73,27 @@ Agent &Agent::operator=(const Agent &agent) {
     specialty = agent.specialty;
 }
 
+string Agent::toString() {
+    string result;
+
+    result = code;
+    result += "|";
+    result += name.toString();
+    result += "|";
+    result += startTime.toString();
+    result += "|";
+    result += endTime.toString();
+    result += "|";
+    result += to_string(extension);
+    result += "|";
+    result += to_string(extraHours);
+    result += "|";
+    result += to_string(specialty);
+    result += "|";
+
+    return result;
+}
+
 bool Agent::operator==(const Agent &agent) {
     return extension == agent.extension;
 }

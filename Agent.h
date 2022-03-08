@@ -31,6 +31,7 @@ public:
     void setData(string& code, const Name& name, const Time& startTime, const Time& endTime,
                  int& extension, int& extraHours, int& specialty);
     void addExtraHours(int& extraHours);
+    string toString();
     Agent& operator = (const Agent& agent);
     bool operator == (const Agent& agent);
     bool operator != (const Agent& agent);
