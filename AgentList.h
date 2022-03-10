@@ -21,9 +21,11 @@ public:
     bool isEmpty();
     void insertData(AgentNode* agentNode, const Agent& tempAgent);
     void deleteData(AgentNode* agentNode);
+    void showData(AgentNode* agentNode);
+    void showAllData();
     AgentNode* getFirstPos();
     AgentNode* getLastPos();
-    AgentNode* getPrevPos();
+    AgentNode* getPrevPos(AgentNode* agentNode);
     AgentNode* getNextPos(AgentNode* agentNode);
     AgentNode* findData(const Agent& agent);
     Agent retrieve(AgentNode* agentNode);

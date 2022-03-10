@@ -1,5 +1,6 @@
 #include "AgentList.h"
 #include "ListException.h"
+#include "util.h"
 
 bool AgentList::isValidPos(AgentNode *agentNode) {
     AgentNode* temp(header);
@@ -54,27 +55,137 @@ void AgentList::insertData(AgentNode *agentNode, const Agent &tempAgent) {
         throw ListException("Memoria no disponible, tratando de insertar");
     }
 
-    newOne->setPrev(agentNode);
-    newOne->setNext(agentNode->getNext());
+    newOne->setNext(header);
+    newOne->setPrev(nullptr);
 
-    agentNode->getNext()->setPrev(newOne);
-    agentNode->setNext(newOne);
+    if((header)!=nullptr){
+        header->setPrev(newOne);
+    }
+    header = newOne;
 }
 
 void AgentList::deleteData(AgentNode *agentNode) {
+    AgentNode* temp(header);
 
+    if(agentNode == nullptr){
+        cout << "No existe el agente" << endl;
+        return;
+    } else if(temp == nullptr){
+        cout << "No hay agentes en la lista" << endl;
+        return;
+    }
+    if(temp == agentNode){
+        header = header->getNext();
+        free(agentNode);
+        return;
+    }
+    if(agentNode == getLastPos()){
+        temp = agentNode;
+        temp = temp->getPrev();
+        temp->setNext(nullptr);
+        free(agentNode);
+        return;
+    }
+    if(agentNode != header && agentNode != getLastPos()) {
+        while (temp != agentNode) {
+            temp = getNextPos(temp);
+        }
+        if (temp == agentNode) {
+            temp->getNext()->setPrev(temp->getPrev());
+            temp->getPrev()->setNext(temp->getNext());
+            free(agentNode);
+        }
+    }
+
+
+}
+
+void AgentList::showData(AgentNode *agentNode) {
+    AgentNode* temp;
+    AgentNode* last;
+
+    last = getLastPos();
+    temp = header;
+    if(temp == nullptr){
+        return;
+    }
+    if(temp == last){
+        if(temp == agentNode){
+            cout << "|" << temp->getData().getName().toString();
+            cout.width(20 - temp->getData().getName().toString().size());
+            cout << "|" << temp->getData().getCode();
+            cout.width(20 - temp->getData().getCode().size());
+            cout << "|" << temp->getData().getSpecialty();
+            cout.width(20 - countDigits(temp->getData().getSpecialty()));
+            cout << "|" << temp->getData().getStartTime().toString();
+            cout << " - " << temp->getData().getEndTime().toString();
+            cout.width(20 - temp->getData().getStartTime().toString().size() + temp->getData().getEndTime().toString().size());
+            cout << "|" << temp->getData().getExtraHours();
+            cout.width(20 - countDigits(temp->getData().getExtraHours()));
+            cout << "|" << endl;
+        }
+    } else {
+        while(temp != nullptr){
+            if(temp == agentNode){
+                cout << "|" << temp->getData().getName().toString();
+                cout.width(20 - temp->getData().getName().toString().size());
+                cout << "|" << temp->getData().getCode();
+                cout.width(20 - temp->getData().getCode().size());
+                cout << "|" << temp->getData().getSpecialty();
+                cout.width(20 - countDigits(temp->getData().getSpecialty()));
+                cout << "|" << temp->getData().getStartTime().toString();
+                cout << " - " << temp->getData().getEndTime().toString();
+                cout << "|" << temp->getData().getExtraHours();
+                cout.width(13 - countDigits(temp->getData().getExtraHours()));
+                cout << "|" << endl;
+            }
+            temp = getNextPos(temp);
+        }
+    }
+}
+
+void AgentList::showAllData() {
+    AgentNode* temp(header);
+    AgentNode* last(getLastPos());
+
+    cout << "|Nombre             " << "|Codigo             " << "|Especialidad       " << "|Horas        " << "|Horas extras|" << endl;
+    if(temp == last){
+        showData(temp);
+    } else {
+        while(temp != nullptr){
+            showData(temp);
+            temp = getNextPos(temp);
+        }
+    }
 }
 
 AgentNode *AgentList::getFirstPos() {
-    return nullptr;
+    if(!isEmpty()){
+        return header;
+    } else {
+        return nullptr;
+    }
 }
 
 AgentNode *AgentList::getLastPos() {
-    return nullptr;
+    if(!isEmpty()) {
+        AgentNode *temp;
+        temp = header;
+        while (temp != nullptr) {
+            if(getNextPos(temp) == nullptr){
+                return temp;
+            } else {
+                temp = getNextPos(temp);
+            }
+        }
+
+    } else {
+        return nullptr;
+    }
 }
 
-AgentNode *AgentList::getPrevPos() {
-    return nullptr;
+AgentNode *AgentList::getPrevPos(AgentNode* agentNode) {
+    return agentNode->getPrev();
 }
 
 AgentNode *AgentList::getNextPos(AgentNode* agentNode) {
@@ -82,11 +193,27 @@ AgentNode *AgentList::getNextPos(AgentNode* agentNode) {
 }
 
 AgentNode *AgentList::findData(const Agent &agent) {
+    AgentNode* temp(header);
+    while(temp != nullptr){
+        if(temp->getData() == agent){
+            return temp;
+        } else {
+            temp = getNextPos(temp);
+        }
+    }
     return nullptr;
 }
 
 Agent AgentList::retrieve(AgentNode *agentNode) {
-    return Agent();
+    AgentNode* temp(header);
+    while(temp != nullptr){
+        if(temp == agentNode){
+            return temp->getData();
+        } else {
+            temp = getNextPos(temp);
+        }
+    }
+    return {};
 }
 
 void AgentList::sortByName() {
@@ -111,7 +238,13 @@ string AgentList::toString() {
 }
 
 void AgentList::deleteAll() {
-
+    AgentNode* temp(header);
+    AgentNode* prev;
+    while(temp != nullptr){
+        prev = temp;
+        temp = getNextPos(temp);
+        delete prev;
+    }
 }
 
 void AgentList::writeToDisk(const string &data) {

@@ -41,9 +41,15 @@ void Time::setData(const int &h, const int &m) {
 
 string Time::toString() {
     string result;
+    if(hour <= 9){
+        result += "0";
+    }
     result += to_string(hour);
     result += ":";
     result += to_string(minute);
+    if(minute <= 9){
+        result += "0";
+    }
     return result;
 }
 

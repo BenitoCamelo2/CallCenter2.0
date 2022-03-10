@@ -30,6 +30,7 @@ public:
     int getSpecialty();
     void setData(string& code, const Name& name, const Time& startTime, const Time& endTime,
                  int& extension, int& extraHours, int& specialty);
+    void setCode(string& code);
     void addExtraHours(int& extraHours);
     string toString();
     Agent& operator = (const Agent& agent);

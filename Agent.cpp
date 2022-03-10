@@ -59,6 +59,10 @@ void Agent::setData(string &code, const Name &name, const Time &startTime, const
     this->specialty = specialty;
 }
 
+void Agent::setCode(string& code){
+    this->code = code;
+}
+
 void Agent::addExtraHours(int &extraHours) {
     this->extraHours += extraHours;
 }
@@ -71,6 +75,8 @@ Agent &Agent::operator=(const Agent &agent) {
     endTime = agent.endTime;
     extraHours = agent.extraHours;
     specialty = agent.specialty;
+
+    return *this;
 }
 
 string Agent::toString() {
@@ -95,25 +101,25 @@ string Agent::toString() {
 }
 
 bool Agent::operator==(const Agent &agent) {
-    return extension == agent.extension;
+    return code == agent.code;
 }
 
 bool Agent::operator!=(const Agent &agent) {
-    return extension != agent.extension;
+    return code != agent.code;
 }
 
 bool Agent::operator<(const Agent &agent) {
-    return extension < agent.extension;
+    return code < agent.code;
 }
 
 bool Agent::operator<=(const Agent &agent) {
-    return extension <= agent.extension;
+    return code <= agent.code;
 }
 
 bool Agent::operator>(const Agent &agent) {
-    return extension > agent.extension;
+    return code > agent.code;
 }
 
 bool Agent::operator>=(const Agent &agent) {
-    return extension >= agent.extension;
+    return code >= agent.code;
 }
