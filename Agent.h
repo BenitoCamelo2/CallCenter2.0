@@ -31,7 +31,12 @@ public:
     void setData(string& code, const Name& name, const Time& startTime, const Time& endTime,
                  int& extension, int& extraHours, int& specialty);
     void setCode(string& code);
+    void setName(const Name& name);
+    void setStartTime(const Time& startTime);
+    void setEndTime(const Time& endTime);
+    void setExtension(int& extension);
     void addExtraHours(int& extraHours);
+    void setSpecialty(int& specialty);
     string toString();
     Agent& operator = (const Agent& agent);
     bool operator == (const Agent& agent);

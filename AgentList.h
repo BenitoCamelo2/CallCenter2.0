@@ -27,7 +27,7 @@ public:
     AgentNode* getLastPos();
     AgentNode* getPrevPos(AgentNode* agentNode);
     AgentNode* getNextPos(AgentNode* agentNode);
-    AgentNode* findData(const Agent& agent);
+    AgentNode* findData(Agent& agent, int option);
     Agent retrieve(AgentNode* agentNode);
     void sortByName();
     void sortBySpecialty();

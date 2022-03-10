@@ -1,5 +1,6 @@
 #include "AgentList.h"
 #include "ListException.h"
+#include "AgentMenu.h"
 #include "util.h"
 
 bool AgentList::isValidPos(AgentNode *agentNode) {
@@ -67,18 +68,22 @@ void AgentList::insertData(AgentNode *agentNode, const Agent &tempAgent) {
 void AgentList::deleteData(AgentNode *agentNode) {
     AgentNode* temp(header);
 
+    //if the agent wasn't found
     if(agentNode == nullptr){
         cout << "No existe el agente" << endl;
         return;
+    //no elements in the list
     } else if(temp == nullptr){
         cout << "No hay agentes en la lista" << endl;
         return;
     }
+    //if the element is the header
     if(temp == agentNode){
         header = header->getNext();
         free(agentNode);
         return;
     }
+    //if the element is the last in the list
     if(agentNode == getLastPos()){
         temp = agentNode;
         temp = temp->getPrev();
@@ -86,6 +91,7 @@ void AgentList::deleteData(AgentNode *agentNode) {
         free(agentNode);
         return;
     }
+    //while can be removed here probably, but if the node is corrupt it will mess up the list
     if(agentNode != header && agentNode != getLastPos()) {
         while (temp != agentNode) {
             temp = getNextPos(temp);
@@ -106,9 +112,12 @@ void AgentList::showData(AgentNode *agentNode) {
 
     last = getLastPos();
     temp = header;
+    //makes sure there are elements in the list, if not it doesn't print anything, because it can crash
+    //if there aren't any elements
     if(temp == nullptr){
         return;
     }
+    //one element in the list
     if(temp == last){
         if(temp == agentNode){
             cout << "|" << temp->getData().getName().toString();
@@ -124,6 +133,7 @@ void AgentList::showData(AgentNode *agentNode) {
             cout.width(20 - countDigits(temp->getData().getExtraHours()));
             cout << "|" << endl;
         }
+    //multiple elements in the list
     } else {
         while(temp != nullptr){
             if(temp == agentNode){
@@ -152,6 +162,8 @@ void AgentList::showAllData() {
     if(temp == last){
         showData(temp);
     } else {
+        //quite inneficient, i could always just duplicate the code in show data, but it loops in a while
+        //it is inefficient because im looping here
         while(temp != nullptr){
             showData(temp);
             temp = getNextPos(temp);
@@ -192,16 +204,78 @@ AgentNode *AgentList::getNextPos(AgentNode* agentNode) {
     return agentNode->getNext();
 }
 
-AgentNode *AgentList::findData(const Agent &agent) {
+AgentNode *AgentList::findData(Agent &agent, int option) {
     AgentNode* temp(header);
-    while(temp != nullptr){
-        if(temp->getData() == agent){
-            return temp;
-        } else {
-            temp = getNextPos(temp);
+
+    switch(option){
+        case SEARCH_CODE : {
+            while(temp != nullptr){
+                if(temp->getData() == agent){
+                    return temp;
+                } else {
+                    temp = getNextPos(temp);
+                }
+            }
+            return nullptr;
+        }
+        case SEARCH_LAST_NAME: {
+            while(temp != nullptr){
+                if(temp->getData().getName().getLastName() == agent.getName().getLastName()){
+                    return temp;
+                } else {
+                    temp = getNextPos(temp);
+                }
+            }
+            return nullptr;
+        }
+        case SEARCH_HOUR_START: {
+            while(temp != nullptr){
+                if(temp->getData().getStartTime().getHour() == agent.getStartTime().getHour()){
+                    return temp;
+                } else {
+                    temp = getNextPos(temp);
+                }
+            }
+            return nullptr;
+        }
+        case SEARCH_HOUR_END: {
+            while(temp != nullptr){
+                if(temp->getData().getEndTime().getHour() == agent.getEndTime().getHour()){
+                    return temp;
+                } else {
+                    temp = getNextPos(temp);
+                }
+            }
+            return nullptr;
+        }
+        case SEARCH_EXTENSION: {
+            while(temp != nullptr){
+                if(temp->getData().getExtension() == agent.getExtension()){
+                    return temp;
+                } else {
+                    temp = getNextPos(temp);
+                }
+            }
+            return nullptr;
+        }
+        case SEARCH_SPECIALTY: {
+            while(temp != nullptr){
+                if(temp->getData().getSpecialty() == agent.getSpecialty()){
+                    return temp;
+                } else {
+                    temp = getNextPos(temp);
+                }
+            }
+            return nullptr;
+        }
+        default: {
+            cout << "Error al buscar agente" << endl;
+            cin.ignore();
+            cout << "Ingresa una tecla para continuar..." << endl;
+            getchar();
         }
     }
-    return nullptr;
+
 }
 
 Agent AgentList::retrieve(AgentNode *agentNode) {

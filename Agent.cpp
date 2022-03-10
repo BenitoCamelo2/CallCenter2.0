@@ -63,6 +63,26 @@ void Agent::setCode(string& code){
     this->code = code;
 }
 
+void Agent::setName(const Name &name) {
+    this->name = name;
+}
+
+void Agent::setStartTime(const Time &startTime) {
+    this->startTime = startTime;
+}
+
+void Agent::setEndTime(const Time &endTime) {
+    this->endTime = endTime;
+}
+
+void Agent::setExtension(int& extension) {
+    this->extension = extension;
+}
+
+void Agent::setSpecialty(int &specialty) {
+    this->specialty = specialty;
+}
+
 void Agent::addExtraHours(int &extraHours) {
     this->extraHours += extraHours;
 }

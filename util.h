@@ -14,5 +14,7 @@ enum opcionesSplash{
 
 int countDigits(int n);
 
+bool verifyINT(int min, int max, int n);
+
 
 #endif //PROGRAMA_UTIL_H

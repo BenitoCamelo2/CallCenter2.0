@@ -15,9 +15,9 @@ private:
     void deleteClient();
     void modifyClient();
     void searchClient();
-    void mainMenu();
+    void mainClientMenu();
 public:
-    ClientMenu(ClientList* clientList);
+    explicit ClientMenu(ClientList* clientList);
 };
 
 

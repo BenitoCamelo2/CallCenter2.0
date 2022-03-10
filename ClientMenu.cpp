@@ -11,7 +11,7 @@ enum{
 };
 
 ClientMenu::ClientMenu(ClientList *clientList): clientListRef(clientList) {
-    mainMenu();
+    mainClientMenu();
 }
 
 void ClientMenu::enterToContinue() {
@@ -282,7 +282,7 @@ void ClientMenu::searchClient() {
     }
 }
 
-void ClientMenu::mainMenu() {
+void ClientMenu::mainClientMenu() {
     bool terminate = false;
 
     do{
