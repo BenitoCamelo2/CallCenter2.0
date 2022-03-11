@@ -1,7 +1,13 @@
 #include "AgentMenu.h"
 #include "util.h"
 
-
+#ifdef _WIN32
+#define CLEAR CLEAR
+#elif defined(unix) || defined(__unix__) || defined(__APPLE__) || defined(__MACH__)
+#define CLEAR "clear"
+#else
+#error "SO no soportado para limpiar pantalla"
+#endif
 
 AgentMenu::AgentMenu(AgentList* agentList): agentListRef(agentList) {
     mainAgentMenu();
@@ -20,7 +26,7 @@ void AgentMenu::addAgent() {
     Time startTime, endTime;
     int extension, extraHours, specialty, tempHour, tempMinute, codeINT;
 
-    system("cls");
+    system(CLEAR);
     cout << "AGREGAR AGENTE" << endl;
 
     //code, verify as int then assign to str
@@ -110,10 +116,10 @@ void AgentMenu::deleteAgent() {
     string code;
     bool terminate = false;
 
-    system("cls");
+    system(CLEAR);
     cout << "ELIMINAR AGENTE" << endl << endl;
 
-    showAgents();
+    agentListRef->showAllData();
     cout << "Ingresa el codigo del agente que desea eliminar: ";
     cin.ignore();getline(cin, code);
     do {
@@ -135,7 +141,154 @@ void AgentMenu::deleteAgent() {
 }
 
 void AgentMenu::modifyAgent() {
+    bool terminate = false;
+    AgentNode* temp;
+    string agentCode;
+    Agent tempAgent;
 
+    system(CLEAR);
+    cout << "MODIFICAR AGENTE" << endl;
+
+    agentListRef->showAllData();
+    cout << "Ingresa el codigo: ";
+    cin.ignore();getline(cin, agentCode);
+
+    tempAgent.setCode(agentCode);
+
+    while(!terminate){
+        temp = agentListRef->findData(tempAgent, 1);
+        if(temp == nullptr){
+            cout << "Ingresa de nuevo: ";
+            getline(cin, agentCode);
+            tempAgent.setCode(agentCode);
+        } else {
+            terminate = true;
+        }
+    }
+
+    tempAgent = agentListRef->retrieve(temp);
+
+    terminate = false;
+    do{
+        system(CLEAR);
+        cout << "MODIFICANDO " << tempAgent.getName().getFirstName() << endl;
+        int option = 0;
+        cout << "Modificar: " << endl;
+        cout << "1. Codigo" << endl;
+        cout << "2. Nombre" << endl;
+        cout << "3. Hora de inicio de jornada" << endl;
+        cout << "4. Hora de fin de jornada" << endl;
+        cout << "5. Extension" << endl;
+        cout << "6. Horas extras" << endl;
+        cout << "7. Especialidad" << endl;
+        cout << "8. Regresar" << endl;
+        cout << "Opcion: ";
+        cin >> option;
+        switch(option){
+            case MODIFY_CODE: {
+                int codeINT;
+                string codeSTR;
+
+                cout << "Ingresa el codigo nuevo: ";
+                cin >> codeINT;
+
+                while (!verifyINT(1, -1, codeINT)) {
+                    cout << "Ingresa de nuevo: ";
+                    cin >> codeINT;
+                }
+                codeSTR = to_string(codeINT);
+                tempAgent.setCode(codeSTR);
+                break;
+            }
+            case MODIFY_NAME: {
+                string firstName, lastName;
+                Name name;
+
+                cout << "Ingresa el primero nombre: ";
+                cin.ignore();getline(cin, firstName);
+                cout << "Ingresa su apellido: ";
+                getline(cin, lastName);
+                name.setData(firstName, lastName);
+
+                tempAgent.setName(name);
+                break;
+            }
+            case MODIFY_START_TIME: {
+                int hour, minute;
+                Time startTime;
+
+                cout << "Ingresa la hora: ";
+                cin >> hour;
+                cout << "Ingresa el minuto: ";
+                cin >> minute;
+                startTime.setData(hour, minute);
+
+                tempAgent.setStartTime(startTime);
+                break;
+            }
+            case MODIFY_END_TIME: {
+                int hour, minute;
+                Time endTime;
+
+                cout << "Ingresa la hora: ";
+                cin >> hour;
+                cout << "Ingresa el minuto: ";
+                cin >> minute;
+                endTime.setData(hour, minute);
+
+                tempAgent.setEndTime(endTime);
+                break;
+            }
+            case MODIFY_EXTENSION: {
+                int extension;
+
+                cout << "Ingresa la extension: ";
+                cin >> extension;
+                while(!verifyINT(1,-1,extension)){
+                    cout << "Ingresa de nuevo: ";
+                    cin >> extension;
+                }
+
+                tempAgent.setExtension(extension);
+                break;
+            }
+            case MODIFY_EXTRA_HOURS: {
+                int extraHours;
+
+                cout << "Ingresa las horas extras a sumar: ";
+                cin >> extraHours;
+                while(!verifyINT(0,-1,extraHours)){
+                    cout << "Ingresa de nuevo: ";
+                    cin >> extraHours;
+                }
+
+                tempAgent.addExtraHours(extraHours);
+                break;
+            }
+            case MODIFY_SPECIALTY: {
+                int specialty;
+
+                cout << "Ingresa la especialidad: ";
+                cin >> specialty;
+                while(!verifyINT(1,6,specialty)){
+                    cout << "Ingresa de nuevo: ";
+                    cin >> specialty;
+                }
+                tempAgent.setSpecialty(specialty);
+                break;
+            }
+            case EXIT_MODIFY: {
+                temp->setData(tempAgent);
+                terminate = true;
+                break;
+            }
+            default: {
+                cout << "Opcion invalida" << endl;
+                cin.ignore();
+                enterToContinue();
+            }
+        }
+    }while(!terminate);
 }
 
 void AgentMenu::searchAgent() {
@@ -143,7 +296,7 @@ void AgentMenu::searchAgent() {
 
     do{
         int option = 0;
-        system("cls");
+        system(CLEAR);
         cout << "BUSCAR AGENTE" << endl;
         cout << "Buscar por: " << endl;
         cout << "1. Codigo" << endl;
@@ -170,7 +323,7 @@ void AgentMenu::searchAgent() {
                 codeSTR = to_string(codeINT);
                 tempAgent.setCode(codeSTR);
 
-                cout << "|Nombre             " << "|Codigo             " << "|Especialidad       " << "|Horas        " << "|Horas extras|" << endl;
+                listHeader();
                 agentListRef->showData(agentListRef->findData(tempAgent, SEARCH_CODE));
                 cin.ignore();enterToContinue();
                 break;
@@ -185,7 +338,7 @@ void AgentMenu::searchAgent() {
                 name.setData(firstName, lastName);
                 tempAgent.setName(name);
 
-                cout << "|Nombre             " << "|Codigo             " << "|Especialidad       " << "|Horas        " << "|Horas extras|" << endl;
+                listHeader();
                 agentListRef->showData(agentListRef->findData(tempAgent, SEARCH_LAST_NAME));
                 enterToContinue();
                 break;
@@ -200,7 +353,7 @@ void AgentMenu::searchAgent() {
                 time.setData(hour, minute);
                 tempAgent.setStartTime(time);
 
-                cout << "|Nombre             " << "|Codigo             " << "|Especialidad       " << "|Horas        " << "|Horas extras|" << endl;
+                listHeader();
                 agentListRef->showData(agentListRef->findData(tempAgent, SEARCH_HOUR_START));
                 cin.ignore();enterToContinue();
                 break;
@@ -215,7 +368,7 @@ void AgentMenu::searchAgent() {
                 time.setData(hour, minute);
                 tempAgent.setEndTime(time);
 
-                cout << "|Nombre             " << "|Codigo             " << "|Especialidad       " << "|Horas        " << "|Horas extras|" << endl;
+                listHeader();
                 agentListRef->showData(agentListRef->findData(tempAgent, SEARCH_HOUR_END));
                 cin.ignore();enterToContinue();
                 break;
@@ -232,7 +385,7 @@ void AgentMenu::searchAgent() {
                 }
                 tempAgent.setExtension(extension);
 
-                cout << "|Nombre             " << "|Codigo             " << "|Especialidad       " << "|Horas        " << "|Horas extras|" << endl;
+                listHeader();
                 agentListRef->showData(agentListRef->findData(tempAgent, SEARCH_EXTENSION));
                 cin.ignore();enterToContinue();
                 break;
@@ -250,7 +403,7 @@ void AgentMenu::searchAgent() {
 
                 tempAgent.setSpecialty(specialty);
 
-                cout << "|Nombre             " << "|Codigo             " << "|Especialidad       " << "|Horas        " << "|Horas extras|" << endl;
+                listHeader();
                 agentListRef->showData(agentListRef->findData(tempAgent, SEARCH_SPECIALTY));
                 cin.ignore();enterToContinue();
                 break;
@@ -268,10 +421,6 @@ void AgentMenu::searchAgent() {
     }while(!terminate);
 }
 
-void AgentMenu::showAgents() {
-
-}
-
 void AgentMenu::sortAgents() {
 
 }
@@ -281,7 +430,7 @@ void AgentMenu::mainAgentMenu() {
 
     do{
         int option = 0;
-        system("cls");
+        system(CLEAR);
         cout << "MENU DE AGENTES" << endl;
         cout << "1. Agregar agente" << endl;
         cout << "2. Eliminar agente" << endl;
@@ -315,7 +464,9 @@ void AgentMenu::mainAgentMenu() {
                 break;
             }
             case SHOW_AGENTS: {
-                showAgents();
+                agentListRef->showAllData();
+                cin.ignore();
+                enterToContinue();
                 break;
             }
             case DELETE_ALL_AGENTS: {

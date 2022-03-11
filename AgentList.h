@@ -35,8 +35,6 @@ public:
     void deleteAll();
     void writeToDisk(const string& data);
     string readFromDisk();
-    AgentList& operator = (const AgentList& agents);
-
 };
 
 

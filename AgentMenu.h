@@ -15,7 +15,6 @@ private:
     void deleteAgent();
     void modifyAgent();
     void searchAgent();
-    void showAgents();
     void sortAgents();
     void mainAgentMenu();
 public:
@@ -43,6 +42,16 @@ enum{
     EXIT_AGENT
 };
 
+enum {
+    MODIFY_CODE = 1,
+    MODIFY_NAME,
+    MODIFY_START_TIME,
+    MODIFY_END_TIME,
+    MODIFY_EXTENSION,
+    MODIFY_EXTRA_HOURS,
+    MODIFY_SPECIALTY,
+    EXIT_MODIFY
+};
 
 
 #endif //PROGRAMA_AGENTMENU_H

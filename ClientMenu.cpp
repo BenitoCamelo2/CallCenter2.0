@@ -1,5 +1,13 @@
 #include "ClientMenu.h"
 
+#ifdef _WIN32
+#define CLEAR "cls"
+#elif defined(unix) || defined(__unix__) || defined(__APPLE__) || defined(__MACH__)
+#define CLEAR "clear"
+#else
+#error "SO no soportado para limpiar pantalla"
+#endif
+
 enum{
     ADD_CLIENT = 1,
     DELETE_CLIENT,
@@ -25,7 +33,7 @@ void ClientMenu::addClient() {
     long long clientPhoneNumber;
     Time clientCallDuration, clientCallStart;
     Date clientCallDate;
-    system("cls");
+    system(CLEAR);
     cout << "AGREGAR CLIENTE" << endl;
     cout << "Numero telefonico: ";
     cin >> clientPhoneNumber;
@@ -82,15 +90,16 @@ void ClientMenu::modifyClient() {
     Client tempClient1 = Client();
     ClientNode* tempClientNode;
     long long phoneNumber;
-    system("cls");
-    cout << "MODIFICAR CLIENTE" << endl;
+    system(CLEAR);
+    cout << "MODIFICAR CLIENTE" << endl << endl;
+    clientListRef->showAllData();
     cout << "Numero telefonico: ";
     cin >> phoneNumber;
     tempClient1.setPhoneNumber(phoneNumber);
     tempClientNode = clientListRef->retrievePos(tempClient1, 1);
     if(tempClientNode != nullptr){
         int opc;
-        system("cls");
+        system(CLEAR);
         cout << "MODIFICAR " << tempClientNode->getData().getPhoneNumber() << endl;
         cout << "Seleccionar una opcion para modificar: " << endl;
         cout << "1. Numero telefonico" << endl;
@@ -164,7 +173,7 @@ void ClientMenu::modifyClient() {
 }
 
 void ClientMenu::searchClient() {
-    system("cls");
+    system(CLEAR);
     int opc;
     cout << "BUSCAR CLIENTE" << endl;
     cout << "Buscar por: " << endl;
@@ -287,7 +296,7 @@ void ClientMenu::mainClientMenu() {
 
     do{
         int opc = 0;
-        system("cls");
+        system(CLEAR);
         cout << "MENU DE CLIENTES" << endl;
         cout << "1. Agregar cliente" << endl;
         cout << "2. Eliminar cliente" << endl;
@@ -316,7 +325,7 @@ void ClientMenu::mainClientMenu() {
                 break;
             }
             case SHOW_CLIENTS: {
-                system("cls");
+                system(CLEAR);
                 cout << "MOSTRAR CLIENTES" << endl;
                 cout << "|Numero Telefonico  |Fecha de llamada   |Hora inicio de llamada|Duracion de llamada|" << endl;
                 clientListRef->showAllData();

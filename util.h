@@ -16,5 +16,7 @@ int countDigits(int n);
 
 bool verifyINT(int min, int max, int n);
 
+void listHeader();
+
 
 #endif //PROGRAMA_UTIL_H

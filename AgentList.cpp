@@ -158,7 +158,7 @@ void AgentList::showAllData() {
     AgentNode* temp(header);
     AgentNode* last(getLastPos());
 
-    cout << "|Nombre             " << "|Codigo             " << "|Especialidad       " << "|Horas        " << "|Horas extras|" << endl;
+    listHeader();
     if(temp == last){
         showData(temp);
     } else {
@@ -328,7 +328,3 @@ void AgentList::writeToDisk(const string &data) {
 string AgentList::readFromDisk() {
     return "";
 }
-
-/*AgentList &AgentList::operator=(const AgentList &agents) {
-    return 0;
-}*/

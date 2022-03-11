@@ -1,4 +1,7 @@
+#include <iostream>
 #include "util.h"
+
+using namespace std;
 
 int countDigits(int n){
     int count = 0;
@@ -31,4 +34,8 @@ bool verifyINT(int min, int max, int n){
             return false;
         }
     }
+}
+
+void listHeader(){
+    cout << "|Nombre             " << "|Codigo             " << "|Especialidad       " << "|Horas        " << "|Horas extras|" << endl;
 }
