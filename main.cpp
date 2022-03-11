@@ -4,7 +4,7 @@
 #include "ClientMenu.h"
 
 #ifdef _WIN32
-#define CLEAR CLEAR
+#define CLEAR "cls"
 #elif defined(unix) || defined(__unix__) || defined(__APPLE__) || defined(__MACH__)
 #define CLEAR "clear"
 #else
