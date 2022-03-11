@@ -491,3 +491,7 @@ void AgentMenu::mainAgentMenu() {
         }
     }while(!terminate);
 }
+
+AgentList* AgentMenu::getAgentList() {
+    return agentListRef;
+}

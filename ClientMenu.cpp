@@ -349,3 +349,7 @@ void ClientMenu::mainClientMenu() {
         }
     }while(!terminate);
 }
+
+ClientList* ClientMenu::getClientList() {
+    return clientListRef;
+}

@@ -19,6 +19,7 @@ private:
     void mainAgentMenu();
 public:
     explicit AgentMenu(AgentList* agentList);
+    AgentList* getAgentList();
 };
 
 enum{
