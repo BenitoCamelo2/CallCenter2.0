@@ -83,8 +83,8 @@ void ClientList::deleteData(ClientNode *clientNode) {
         //but just to make sure its there
         if (temp->getNext() == nullptr && temp == clientNode) {
             //basically creates a new list
-            delete temp;
-            header = new ClientNode();
+            free(header);
+            header = nullptr;
         //when there is multiple nodes in the list
         } else {
             //finds it and "deletes" it

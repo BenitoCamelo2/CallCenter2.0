@@ -36,6 +36,10 @@ bool verifyINT(int min, int max, int n){
     }
 }
 
-void listHeader(){
-    cout << "|Nombre             " << "|Codigo             " << "|Especialidad       " << "|Horas        " << "|Horas extras|" << endl;
+void agentListHeader(){
+    cout << "|Nombre             " << "|Codigo             " << "|Especialidad       " << "|Horas        " << "|Horas extras       |" << endl;
+}
+
+void clientListHeader(){
+    cout << "|Numero Telefonico  |Fecha de llamada   |Hora inicio de llamada|Duracion de llamada|" << endl;
 }

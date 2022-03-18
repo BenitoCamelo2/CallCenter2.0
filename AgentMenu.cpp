@@ -327,7 +327,7 @@ void AgentMenu::searchAgent() {
                 codeSTR = to_string(codeINT);
                 tempAgent.setCode(codeSTR);
 
-                listHeader();
+                agentListHeader();
                 printAgent(agentListRef->findData(tempAgent, SEARCH_CODE));
                 cin.ignore();enterToContinue();
                 break;
@@ -342,7 +342,7 @@ void AgentMenu::searchAgent() {
                 name.setData(firstName, lastName);
                 tempAgent.setName(name);
 
-                listHeader();
+                agentListHeader();
                 printAgent(agentListRef->findData(tempAgent, SEARCH_LAST_NAME));
                 enterToContinue();
                 break;
@@ -357,7 +357,7 @@ void AgentMenu::searchAgent() {
                 time.setData(hour, minute);
                 tempAgent.setStartTime(time);
 
-                listHeader();
+                agentListHeader();
                 printAgent(agentListRef->findData(tempAgent, SEARCH_HOUR_START));
                 cin.ignore();enterToContinue();
                 break;
@@ -372,7 +372,7 @@ void AgentMenu::searchAgent() {
                 time.setData(hour, minute);
                 tempAgent.setEndTime(time);
 
-                listHeader();
+                agentListHeader();
                 printAgent(agentListRef->findData(tempAgent, SEARCH_HOUR_END));
                 cin.ignore();enterToContinue();
                 break;
@@ -389,7 +389,7 @@ void AgentMenu::searchAgent() {
                 }
                 tempAgent.setExtension(extension);
 
-                listHeader();
+                agentListHeader();
                 printAgent(agentListRef->findData(tempAgent, SEARCH_EXTENSION));
                 cin.ignore();enterToContinue();
                 break;
@@ -407,7 +407,7 @@ void AgentMenu::searchAgent() {
 
                 tempAgent.setSpecialty(specialty);
 
-                listHeader();
+                agentListHeader();
                 printAgent(agentListRef->findData(tempAgent, SEARCH_SPECIALTY));
                 cin.ignore();enterToContinue();
                 break;
@@ -438,7 +438,6 @@ void AgentMenu::printAgent(AgentNode* agentNode) {
     cout.width(20 - countDigits(agentNode->getData().getSpecialty()));
     cout << "|" << agentNode->getData().getStartTime().toString();
     cout << " - " << agentNode->getData().getEndTime().toString();
-    cout.width(20 - agentNode->getData().getStartTime().toString().size() + agentNode->getData().getEndTime().toString().size());
     cout << "|" << agentNode->getData().getExtraHours();
     cout.width(20 - countDigits(agentNode->getData().getExtraHours()));
     cout << "|" << endl;
@@ -448,17 +447,22 @@ void AgentMenu::printAgents() {
     AgentNode* temp(agentListRef->getFirstPos());
     AgentNode* last(agentListRef->getLastPos());
 
-    //prints the first line of the list, which shows the categories
-    listHeader();
-    //in this case there is only one element in the list
-    if(temp == last){
-        printAgent(temp);
-    //more than one element in the list
-    } else {
-        while(temp != nullptr){
+    //makes sure there is at least 1 agent, or else it breaks
+    if(temp != nullptr) {
+        //prints the first line of the list, which shows the categories
+        agentListHeader();
+        //in this case there is only one element in the list
+        if (temp == last) {
             printAgent(temp);
-            temp = temp->getNext();
+            //more than one element in the list
+        } else {
+            while (temp != nullptr) {
+                printAgent(temp);
+                temp = temp->getNext();
+            }
         }
+    } else {
+        cout << "No hay agentes en la lista" << endl;
     }
 }
 

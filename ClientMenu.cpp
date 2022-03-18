@@ -67,13 +67,14 @@ void ClientMenu::deleteClient() {
     ClientNode* tempClientNode;
     string phoneNumber;
     cout << "ELIMINAR CLIENTE" << endl;
+    printClients();
     cout << "Numero telefonico: ";
     cin.ignore();getline(cin, phoneNumber);
     tempClient1.setPhoneNumber(phoneNumber);
     tempClientNode = clientListRef->retrievePos(tempClient1, 1);
     if(tempClientNode != nullptr){
         char exit = '\0';
-        cout << "|Numero Telefonico  |Fecha de llamada   |Hora inicio de llamada|Duracion de llamada|" << endl;
+        clientListHeader();
         printClient(tempClientNode);
         cout << "Esta seguro que quiere eliminar el cliente? (N/S): ";
         cin >> exit;
@@ -200,7 +201,7 @@ void ClientMenu::searchClient() {
             tempClientNode = clientListRef->retrievePos(tempClient, 1);
             if(tempClientNode != nullptr){
                 tempClient = clientListRef->findData(tempClientNode);
-                cout << "|Numero Telefonico  |Fecha de llamada   |Hora inicio de llamada|Duracion de llamada|" << endl;
+                clientListHeader();
                 printClient(tempClientNode);
                 cin.ignore();
                 enterToContinue();
@@ -227,7 +228,7 @@ void ClientMenu::searchClient() {
             tempClientNode = clientListRef->retrievePos(tempClient, 2);
             if(tempClientNode != nullptr){
                 tempClient = clientListRef->findData(tempClientNode);
-                cout << "|Numero Telefonico  |Fecha de llamada   |Hora inicio de llamada|Duracion de llamada|" << endl;
+                clientListHeader();
                 printClient(tempClientNode);
                 cin.ignore();
                 enterToContinue();
@@ -252,7 +253,7 @@ void ClientMenu::searchClient() {
             tempClientNode = clientListRef->retrievePos(tempClient, 3);
             if(tempClientNode != nullptr){
                 tempClient = clientListRef->findData(tempClientNode);
-                cout << "|Numero Telefonico  |Fecha de llamada   |Hora inicio de llamada|Duracion de llamada|" << endl;
+                clientListHeader();
                 printClient(tempClientNode);
                 cin.ignore();
                 enterToContinue();
@@ -277,7 +278,7 @@ void ClientMenu::searchClient() {
             tempClientNode = clientListRef->retrievePos(tempClient, 4);
             if(tempClientNode != nullptr){
                 tempClient = clientListRef->findData(tempClientNode);
-                cout << "|Numero Telefonico  |Fecha de llamada   |Hora inicio de llamada|Duracion de llamada|" << endl;
+                clientListHeader();
                 printClient(tempClientNode);
                 cin.ignore();
                 enterToContinue();
@@ -314,15 +315,20 @@ void ClientMenu::printClients() {
     ClientNode* temp(clientListRef->getFirstPos());
     ClientNode* last(clientListRef->getLastPos());
 
-    //this is when there is only one client in the list
-    if(temp == last){
-        printClient(temp);
-    //multiple clients in the list
-    } else {
-        while(temp != nullptr){
+    //makes sure there are nodes in the list
+    if(temp != nullptr) {
+        //this is when there is only one client in the list
+        if (temp == last) {
             printClient(temp);
-            temp = temp->getNext();
+            //multiple clients in the list
+        } else {
+            while (temp != nullptr) {
+                printClient(temp);
+                temp = temp->getNext();
+            }
         }
+    } else {
+        cout << "No hay agentes en la lista" << endl;
     }
 }
 
@@ -362,7 +368,7 @@ void ClientMenu::mainClientMenu() {
             case SHOW_CLIENTS: {
                 system(CLEAR);
                 cout << "MOSTRAR CLIENTES" << endl;
-                cout << "|Numero Telefonico  |Fecha de llamada   |Hora inicio de llamada|Duracion de llamada|" << endl;
+                clientListHeader();
                 printClients();
                 cin.ignore();
                 enterToContinue();

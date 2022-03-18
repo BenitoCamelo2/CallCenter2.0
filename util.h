@@ -16,7 +16,9 @@ int countDigits(long long n);
 
 bool verifyINT(int min, int max, int n);
 
-void listHeader();
+void agentListHeader();
+
+void clientListHeader();
 
 
 #endif //PROGRAMA_UTIL_H

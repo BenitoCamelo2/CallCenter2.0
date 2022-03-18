@@ -47,10 +47,10 @@ string Time::toString() {
     }
     result += to_string(hour);
     result += ":";
-    result += to_string(minute);
     if(minute <= 9){
         result += "0";
     }
+    result += to_string(minute);
     return result;
 }
 
