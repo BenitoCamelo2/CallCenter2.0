@@ -9,14 +9,17 @@ using namespace std;
 
 class AgentNode {
 private:
+    //data and nodes
     Agent* dataPTR;
     AgentNode* prev;
     AgentNode* next;
 public:
+    //CONSTRUCTORS
     AgentNode();
     AgentNode(const Agent& agent);
     ~AgentNode();
 
+    //SETTERS AND GETTERS
     Agent* getDataPtr();
     Agent getData();
     AgentNode* getPrev();

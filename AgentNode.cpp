@@ -10,7 +10,7 @@ AgentNode::~AgentNode() {
 
 Agent* AgentNode::getDataPtr() {
     if(dataPTR == nullptr){
-        cout << "Dato no existe" << endl;
+        return nullptr;
     } else {
         return dataPTR;
     }

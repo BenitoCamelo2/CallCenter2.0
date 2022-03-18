@@ -1,7 +1,7 @@
 #include "Client.h"
 
 Client::Client() {
-    phoneNumber = 0;
+    phoneNumber = "";
     callStart = Time();
     callDuration = Time();
     callDate = Date();
@@ -14,7 +14,7 @@ Client::Client(const long long &phoneNumber, const Time &callStart, const Time &
     this->callDate = callDate;
 }
 
-long long Client::getPhoneNumber() {
+string Client::getPhoneNumber() {
     return phoneNumber;
 }
 
@@ -30,14 +30,14 @@ Date Client::getCallDate() {
     return callDate;
 }
 
-void Client::setData(const long long &phoneNumber, const Time &callStart, const Time &callDuration, const Date &callDate) {
+void Client::setData(const string &phoneNumber, const Time &callStart, const Time &callDuration, const Date &callDate) {
     this->phoneNumber = phoneNumber;
     this->callStart = callStart;
     this->callDuration = callDuration;
     this->callDate = callDate;
 }
 
-void Client::setPhoneNumber(const long long &phoneNumber) {
+void Client::setPhoneNumber(const string &phoneNumber) {
     this->phoneNumber = phoneNumber;
 }
 
@@ -56,7 +56,7 @@ void Client::setCallDate(const Date &callDate) {
 string Client::toString(){
     string result;
 
-    result = to_string(phoneNumber);
+    result = phoneNumber;
     result += " | ";
     result += callStart.toString();
     result += " | ";

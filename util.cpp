@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int countDigits(int n){
+int countDigits(long long n){
     int count = 0;
     while (n != 0)
     {

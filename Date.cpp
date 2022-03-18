@@ -1,5 +1,7 @@
 #include "Date.h"
 
+
+//makes sure date is valid
 bool Date::isValid(const int &y, const int &m, const int &d) {
     if(m < 1 || m > 12){
         return false;
@@ -30,6 +32,7 @@ int Date::toInt() {
     return (year%100) + 100 * month + 10000 * day;
 }
 
+//sets the date and time to the system time
 Date::Date() {
     chrono::system_clock::time_point now = chrono::system_clock::now();
     time_t tt = chrono::system_clock::to_time_t(now);
@@ -39,6 +42,7 @@ Date::Date() {
     day = local_tm.tm_mday;
 }
 
+//sets the day, month and year
 Date::Date(const int &y, const int &m, const int &d) :Date(){
     if(isValid(y, m, d)){
         year = y;

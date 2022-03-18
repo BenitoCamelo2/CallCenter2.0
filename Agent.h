@@ -19,8 +19,10 @@ private:
     int extraHours;
     int specialty;
 public:
+    //CONSTRUCTORS
     Agent();
     Agent(const Agent& agent);
+    //GETTERS AND SETTERS
     string getCode();
     Name getName();
     Time getStartTime();
@@ -37,7 +39,9 @@ public:
     void setExtension(int& extension);
     void addExtraHours(int& extraHours);
     void setSpecialty(int& specialty);
+    //returns the agent in string form
     string toString();
+    //OPERATORS
     Agent& operator = (const Agent& agent);
     bool operator == (const Agent& agent);
     bool operator != (const Agent& agent);

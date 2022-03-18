@@ -7,11 +7,14 @@
 
 class ClientNode {
 private:
+    //data and node
     Client data;
     ClientNode* next;
 public:
+    //CONSTRUCTORS
     ClientNode();
     ClientNode(const Client& client);
+    //GETTERS AND SETTERS
     Client getData();
     ClientNode* getNext();
     void setData(const Client& client);

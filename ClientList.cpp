@@ -3,7 +3,7 @@
 
 bool ClientList::isValidPos(ClientNode *clientNode) {
     ClientNode* temp(header);
-
+    //traverse the list, if found returns true, if not after the loop if returns false
     while(temp != nullptr){
         if(temp == clientNode){
             return true;
@@ -37,16 +37,20 @@ string ClientList::toString() {
 }
 
 void ClientList::insertData(ClientNode *clientNode, const Client &client) {
+    //not valid position, still inserts
     if(clientNode != nullptr && !isValidPos(clientNode)){
         throw ListException("Posicion invalida, tratando de insertar");
     }
 
+    //new node built on the client data
     ClientNode* newOne(new ClientNode(client));
 
+    //no ram available
     if(newOne == nullptr){
         throw ListException("Memoria no disponible, tratando de insertar");
     }
 
+    //if the position is null, means its the first item inserted in the list
     if(clientNode == nullptr){
         newOne->setNext(header);
         header = newOne;
@@ -60,6 +64,7 @@ void ClientList::insertOrdered(Client& client){
     ClientNode* aux(header);
     ClientNode* temp(nullptr);
 
+    //when the client phone number is lower than the current position it breaks the loop and inserts the data
     while(aux != nullptr && client > aux->getData()){
         temp = aux;
         aux = getNextPos(aux);
@@ -68,83 +73,45 @@ void ClientList::insertOrdered(Client& client){
 }
 
 void ClientList::deleteData(ClientNode *clientNode) {
-    ClientNode* temp;
-    ClientNode* trail;
-
-    temp = header;
-    trail = nullptr;
-    if(temp != nullptr && temp == clientNode){
-        delete temp;
-        header = new ClientNode();
-    } else {
-        while(temp != nullptr){
-            if(temp == clientNode){
-                trail->setNext(getNextPos(temp));
-                temp = nullptr;
-            } else {
-                trail = temp;
-                temp = getNextPos(temp);
-            }
-        }
-        delete temp;
-    }
-}
-
-void ClientList::showAllData() {
     ClientNode* temp(header);
-    ClientNode* last = getLastPos();
-    if(temp == last){
-        showData(temp);
-    } else {
-        while(temp != nullptr){
-            showData(temp);
-            temp = getNextPos(temp);
-        }
-    }
+    ClientNode* trail(nullptr);
 
-}
-
-void ClientList::showData(ClientNode *clientNode) {
-    ClientNode* temp;
-    ClientNode* last;
-
-    last = getLastPos();
-    temp = header;
-    if(temp == last){
-        if(temp == clientNode){
-            cout << "|" << temp->getData().getPhoneNumber();
-            cout.width(20 - countDigits(temp->getData().getPhoneNumber()));
-            cout << "|" << temp->getData().getCallDate().toString();
-            cout.width(20 - temp->getData().getCallDate().toString().length());
-            cout << "|" << temp->getData().getCallStart().toString();
-            cout.width(23 - temp->getData().getCallStart().toString().length());
-            cout << "|" << temp->getData().getCallDuration().toString();
-            cout.width(20 - temp->getData().getCallDuration().toString().length());
-            cout << "|" << endl;
-        }
-    } else {
-        while(temp != nullptr){
-            if(temp == clientNode){
-                cout << "|" << temp->getData().getPhoneNumber();
-                cout.width(20 - countDigits(temp->getData().getPhoneNumber()));
-                cout << "|" << temp->getData().getCallDate().toString();
-                cout.width(20 - temp->getData().getCallDate().toString().length());
-                cout << "|" << temp->getData().getCallStart().toString();
-                cout.width(23 - temp->getData().getCallStart().toString().length());
-                cout << "|" << temp->getData().getCallDuration().toString();
-                cout.width(20 - temp->getData().getCallDuration().toString().length());
-                cout << "|" << endl;
+    //makes sure the position is valid
+    if(isValidPos(clientNode)) {
+        //this is executed when there is only one item in the list
+        //temp == clientNode technically isn't necesary, since isValidPos makes sure its in the list
+        //but just to make sure its there
+        if (temp->getNext() == nullptr && temp == clientNode) {
+            //basically creates a new list
+            delete temp;
+            header = new ClientNode();
+        //when there is multiple nodes in the list
+        } else {
+            //finds it and "deletes" it
+            while (temp != nullptr) {
+                if (temp == clientNode) {
+                    trail->setNext(getNextPos(temp));
+                    temp = nullptr;
+                } else {
+                    trail = temp;
+                    temp = getNextPos(temp);
+                }
             }
-            temp = getNextPos(temp);
+            delete temp;
         }
+    //if the node is not valid
+    } else {
+        throw ListException("No existe el cliente");
     }
 }
 
 void ClientList::copyAll(const ClientList &clientList) {
-    ClientNode* temp1;
+    ClientNode* temp1(clientList.header);
     ClientNode* temp2;
+
     temp1 = clientList.header;
     header = temp1;
+
     if(!isEmpty()){
         temp2 = header;
         while(temp1 != nullptr){
@@ -160,10 +127,13 @@ void ClientList::copyAll(const ClientList &clientList) {
 ClientNode *ClientList::getFirstPos() {
     if(!isEmpty()){
         return header;
+    } else {
+        return nullptr;
     }
 }
 
 ClientNode *ClientList::getLastPos() {
+    //basic search of list, returns null if not found
     ClientNode* temp;
     temp = header;
     if(!isEmpty()){
@@ -179,6 +149,7 @@ ClientNode *ClientList::getLastPos() {
             }
         }
     }
+    return nullptr;
 }
 
 ClientNode *ClientList::getNextPos(ClientNode* clientNode) {
@@ -191,8 +162,9 @@ ClientNode *ClientList::retrievePos(Client& client, int searchBy) {
 
     last = getLastPos();
     temp = header;
+    //depending on searchBy, it will search by the specified attribute
     switch(searchBy){
-        case 1:{
+        case SEARCH_BY_PHONENUMBER:{
             if(temp == last){
                 if(temp->getData().getPhoneNumber() == client.getPhoneNumber()){
                     return temp;
@@ -209,7 +181,7 @@ ClientNode *ClientList::retrievePos(Client& client, int searchBy) {
             }
             return nullptr;
         }
-        case 2:{
+        case SEARCH_BY_CALLDATE:{
             Date tempDate = client.getCallDate();
             if(temp == last){
                 if(temp->getData().getCallDate().operator==(tempDate)){
@@ -227,7 +199,7 @@ ClientNode *ClientList::retrievePos(Client& client, int searchBy) {
             }
             return nullptr;
         }
-        case 3:{
+        case SEARCH_BY_CALLSTART:{
             Time callStart = client.getCallStart();
             if(temp == last){
                 if(temp->getData().getCallStart().operator==(callStart)){
@@ -245,7 +217,7 @@ ClientNode *ClientList::retrievePos(Client& client, int searchBy) {
             }
             return nullptr;
         }
-        case 4:{
+        case SEARCH_BY_CALLDURATION:{
             Time callDuration = client.getCallDuration();
             if(temp == last){
                 if(temp->getData().getCallDuration().operator==(callDuration)){
@@ -269,37 +241,43 @@ ClientNode *ClientList::retrievePos(Client& client, int searchBy) {
             break;
         }
     }
+    //returns nullptr if not found
+    return nullptr;
 
 }
 
 Client ClientList::findData(ClientNode *clientNode) {
-    ClientNode* temp;
-    ClientNode* last;
+    ClientNode* temp(header);
+    ClientNode* last(getLastPos());
 
-    last = getLastPos();
-    temp = header;
-
+    //not sure why the phoneNumber is 0, it works so i dont want to remove it
     Client tempClient = Client();
     tempClient.setPhoneNumber(0);
 
-    if(temp == last){
-        if(temp == clientNode){
-            return temp->getData();
-        } else {
-            return tempClient;
-        }
-    } else {
-        while(temp != nullptr){
-            if(temp == clientNode){
+    //basic search, if its not in the list it prints doesn't exist
+    if(isValidPos(clientNode)) {
+        if (temp == last) {
+            if (temp == clientNode) {
                 return temp->getData();
+            } else {
+                return tempClient;
             }
-            temp = getNextPos(temp);
+        } else {
+            while (temp != nullptr) {
+                if (temp == clientNode) {
+                    return temp->getData();
+                }
+                temp = getNextPos(temp);
+            }
         }
+        return tempClient;
+    } else {
+        throw ListException("Cliente no existe");
     }
-    return tempClient;
 }
 
 void ClientList::deleteAll() {
+    //goes throught the list, temp gets the next position and trail deletes the previous position
     ClientNode* temp;
     ClientNode* trail;
     ClientNode* last;
@@ -324,5 +302,5 @@ void ClientList::writeToDisk(const string data) {
 }
 
 string ClientList::readFromDisk() {
-    return 0;
+    return "";
 }

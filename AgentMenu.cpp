@@ -20,6 +20,7 @@ void AgentMenu::enterToContinue() {
 }
 
 void AgentMenu::addAgent() {
+    //temp variables to add to the agent variable, then to add to the list
     Agent tempAgent;
     string codeSTR, firstName, lastName;
     Name name;
@@ -93,8 +94,8 @@ void AgentMenu::addAgent() {
     //extra hours
     cout << "Horas extras: ";
     cin >> extraHours;
-    while(!verifyINT(1, -1, extraHours)){
-        cout << "Ingresa de nuevo mayor o igual a 1: ";
+    while(!verifyINT(0, -1, extraHours)){
+        cout << "Ingresa de nuevo mayor o igual a 0: ";
         cin >> extraHours;
     }
 
@@ -111,20 +112,21 @@ void AgentMenu::addAgent() {
 }
 
 void AgentMenu::deleteAgent() {
+    //agent variable to save to search for its position and then delete using that position
     Agent tempAgent;
     AgentNode* agentNode;
+    //only searches by code
     string code;
     bool terminate = false;
 
     system(CLEAR);
     cout << "ELIMINAR AGENTE" << endl << endl;
-
-    agentListRef->showAllData();
+    printAgents();
     cout << "Ingresa el codigo del agente que desea eliminar: ";
     cin.ignore();getline(cin, code);
+    //while loop to make sure the code entered is valid
     do {
         tempAgent.setCode(code);
-
         agentNode = agentListRef->findData(tempAgent, SEARCH_CODE);
         if (agentNode == nullptr) {
             cout << "Ingresa de nuevo porfavor (0 para cancelar): " << endl;
@@ -136,11 +138,12 @@ void AgentMenu::deleteAgent() {
             terminate = true;
         }
     }while(!terminate);
-
+    //deletes the node
     agentListRef->deleteData(agentNode);
 }
 
 void AgentMenu::modifyAgent() {
+    //same theory as deleteAgent()
     bool terminate = false;
     AgentNode* temp;
     string agentCode;
@@ -148,15 +151,13 @@ void AgentMenu::modifyAgent() {
 
     system(CLEAR);
     cout << "MODIFICAR AGENTE" << endl;
-
-    agentListRef->showAllData();
+    printAgents();
     cout << "Ingresa el codigo: ";
     cin.ignore();getline(cin, agentCode);
-
     tempAgent.setCode(agentCode);
-
+    //makes sure the code entered is valid
     while(!terminate){
-        temp = agentListRef->findData(tempAgent, 1);
+        temp = agentListRef->findData(tempAgent, SEARCH_CODE);
         if(temp == nullptr){
             cout << "Ingresa de nuevo: ";
             getline(cin, agentCode);
@@ -169,6 +170,7 @@ void AgentMenu::modifyAgent() {
     tempAgent = agentListRef->retrieve(temp);
 
     terminate = false;
+    //while loop to modify any attribute
     do{
         system(CLEAR);
         cout << "MODIFICANDO " << tempAgent.getName().getFirstName() << endl;
@@ -294,6 +296,7 @@ void AgentMenu::modifyAgent() {
 void AgentMenu::searchAgent() {
     bool terminate = false;
 
+    //chose what to search by
     do{
         int option = 0;
         system(CLEAR);
@@ -309,6 +312,7 @@ void AgentMenu::searchAgent() {
         cout << "Opcion: ";
         cin >> option;
         switch(option){
+        //search options
             case SEARCH_CODE: {
                 int codeINT;
                 string codeSTR;
@@ -324,7 +328,7 @@ void AgentMenu::searchAgent() {
                 tempAgent.setCode(codeSTR);
 
                 listHeader();
-                agentListRef->showData(agentListRef->findData(tempAgent, SEARCH_CODE));
+                printAgent(agentListRef->findData(tempAgent, SEARCH_CODE));
                 cin.ignore();enterToContinue();
                 break;
             }
@@ -339,7 +343,7 @@ void AgentMenu::searchAgent() {
                 tempAgent.setName(name);
 
                 listHeader();
-                agentListRef->showData(agentListRef->findData(tempAgent, SEARCH_LAST_NAME));
+                printAgent(agentListRef->findData(tempAgent, SEARCH_LAST_NAME));
                 enterToContinue();
                 break;
             }
@@ -354,7 +358,7 @@ void AgentMenu::searchAgent() {
                 tempAgent.setStartTime(time);
 
                 listHeader();
-                agentListRef->showData(agentListRef->findData(tempAgent, SEARCH_HOUR_START));
+                printAgent(agentListRef->findData(tempAgent, SEARCH_HOUR_START));
                 cin.ignore();enterToContinue();
                 break;
             }
@@ -369,7 +373,7 @@ void AgentMenu::searchAgent() {
                 tempAgent.setEndTime(time);
 
                 listHeader();
-                agentListRef->showData(agentListRef->findData(tempAgent, SEARCH_HOUR_END));
+                printAgent(agentListRef->findData(tempAgent, SEARCH_HOUR_END));
                 cin.ignore();enterToContinue();
                 break;
             }
@@ -386,7 +390,7 @@ void AgentMenu::searchAgent() {
                 tempAgent.setExtension(extension);
 
                 listHeader();
-                agentListRef->showData(agentListRef->findData(tempAgent, SEARCH_EXTENSION));
+                printAgent(agentListRef->findData(tempAgent, SEARCH_EXTENSION));
                 cin.ignore();enterToContinue();
                 break;
             }
@@ -404,7 +408,7 @@ void AgentMenu::searchAgent() {
                 tempAgent.setSpecialty(specialty);
 
                 listHeader();
-                agentListRef->showData(agentListRef->findData(tempAgent, SEARCH_SPECIALTY));
+                printAgent(agentListRef->findData(tempAgent, SEARCH_SPECIALTY));
                 cin.ignore();enterToContinue();
                 break;
             }
@@ -425,9 +429,43 @@ void AgentMenu::sortAgents() {
 
 }
 
+void AgentMenu::printAgent(AgentNode* agentNode) {
+    cout << "|" << agentNode->getData().getName().toString();
+    cout.width(20 - agentNode->getData().getName().toString().size());
+    cout << "|" << agentNode->getData().getCode();
+    cout.width(20 - agentNode->getData().getCode().size());
+    cout << "|" << agentNode->getData().getSpecialty();
+    cout.width(20 - countDigits(agentNode->getData().getSpecialty()));
+    cout << "|" << agentNode->getData().getStartTime().toString();
+    cout << " - " << agentNode->getData().getEndTime().toString();
+    cout.width(20 - agentNode->getData().getStartTime().toString().size() + agentNode->getData().getEndTime().toString().size());
+    cout << "|" << agentNode->getData().getExtraHours();
+    cout.width(20 - countDigits(agentNode->getData().getExtraHours()));
+    cout << "|" << endl;
+}
+
+void AgentMenu::printAgents() {
+    AgentNode* temp(agentListRef->getFirstPos());
+    AgentNode* last(agentListRef->getLastPos());
+
+    //prints the first line of the list, which shows the categories
+    listHeader();
+    //in this case there is only one element in the list
+    if(temp == last){
+        printAgent(temp);
+    //more than one element in the list
+    } else {
+        while(temp != nullptr){
+            printAgent(temp);
+            temp = temp->getNext();
+        }
+    }
+}
+
 void AgentMenu::mainAgentMenu() {
     bool terminate = false;
 
+    //prints the agent menu
     do{
         int option = 0;
         system(CLEAR);
@@ -443,6 +481,7 @@ void AgentMenu::mainAgentMenu() {
         cout << "Option: ";
         cin >> option;
         switch(option){
+        //user chooses an option
             case ADD_AGENT: {
                 addAgent();
                 break;
@@ -464,7 +503,7 @@ void AgentMenu::mainAgentMenu() {
                 break;
             }
             case SHOW_AGENTS: {
-                agentListRef->showAllData();
+                printAgents();
                 cin.ignore();
                 enterToContinue();
                 break;

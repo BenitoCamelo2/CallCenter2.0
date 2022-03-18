@@ -1,4 +1,5 @@
 #include "ClientMenu.h"
+#include "util.h"
 
 #ifdef _WIN32
 #define CLEAR "cls"
@@ -19,6 +20,7 @@ enum{
 };
 
 ClientMenu::ClientMenu(ClientList *clientList): clientListRef(clientList) {
+    //inicializes main menu
     mainClientMenu();
 }
 
@@ -28,15 +30,17 @@ void ClientMenu::enterToContinue() {
 }
 
 void ClientMenu::addClient() {
+    //temp data to incorporate into a client to add to the list
     Client tempClient;
     int minute, hour, year, day, month;
-    long long clientPhoneNumber;
+    string clientPhoneNumber;
     Time clientCallDuration, clientCallStart;
     Date clientCallDate;
+
     system(CLEAR);
     cout << "AGREGAR CLIENTE" << endl;
     cout << "Numero telefonico: ";
-    cin >> clientPhoneNumber;
+    cin.ignore();getline(cin, clientPhoneNumber);
     cout << "Hora de inicio de llamada: ";
     cin >> hour;
     cout << "Minuto de inicio de llamada: ";
@@ -61,16 +65,16 @@ void ClientMenu::addClient() {
 void ClientMenu::deleteClient() {
     Client tempClient1 = Client();
     ClientNode* tempClientNode;
-    long long phoneNumber;
+    string phoneNumber;
     cout << "ELIMINAR CLIENTE" << endl;
     cout << "Numero telefonico: ";
-    cin >> phoneNumber;
+    cin.ignore();getline(cin, phoneNumber);
     tempClient1.setPhoneNumber(phoneNumber);
     tempClientNode = clientListRef->retrievePos(tempClient1, 1);
     if(tempClientNode != nullptr){
         char exit = '\0';
         cout << "|Numero Telefonico  |Fecha de llamada   |Hora inicio de llamada|Duracion de llamada|" << endl;
-        clientListRef->showData(tempClientNode);
+        printClient(tempClientNode);
         cout << "Esta seguro que quiere eliminar el cliente? (N/S): ";
         cin >> exit;
         cin.ignore();
@@ -89,12 +93,12 @@ void ClientMenu::deleteClient() {
 void ClientMenu::modifyClient() {
     Client tempClient1 = Client();
     ClientNode* tempClientNode;
-    long long phoneNumber;
+    string phoneNumber;
     system(CLEAR);
     cout << "MODIFICAR CLIENTE" << endl << endl;
-    clientListRef->showAllData();
+    printClients();
     cout << "Numero telefonico: ";
-    cin >> phoneNumber;
+    cin.ignore();getline(cin, phoneNumber);
     tempClient1.setPhoneNumber(phoneNumber);
     tempClientNode = clientListRef->retrievePos(tempClient1, 1);
     if(tempClientNode != nullptr){
@@ -111,10 +115,10 @@ void ClientMenu::modifyClient() {
         cin >> opc;
         switch(opc){
             case 1: {
-                long long clientPhoneNumber;
+                string clientPhoneNumber;
                 tempClient1 = tempClientNode->getData();
                 cout << "Numero telefonico nuevo: ";
-                cin >> clientPhoneNumber;
+                cin.ignore();getline(cin, phoneNumber);
                 tempClient1.setPhoneNumber(clientPhoneNumber);
                 tempClientNode->setData(tempClient1);
                 break;
@@ -187,17 +191,17 @@ void ClientMenu::searchClient() {
 
     switch(opc){
         case 1: {
-            long long phoneNumber;
+            string phoneNumber;
             Client tempClient = Client();
             ClientNode* tempClientNode = new ClientNode();
             cout << "Numero telefonico: ";
-            cin >> phoneNumber;
+            cin.ignore();getline(cin, phoneNumber);
             tempClient.setPhoneNumber(phoneNumber);
             tempClientNode = clientListRef->retrievePos(tempClient, 1);
             if(tempClientNode != nullptr){
                 tempClient = clientListRef->findData(tempClientNode);
                 cout << "|Numero Telefonico  |Fecha de llamada   |Hora inicio de llamada|Duracion de llamada|" << endl;
-                clientListRef->showData(tempClientNode);
+                printClient(tempClientNode);
                 cin.ignore();
                 enterToContinue();
             } else {
@@ -224,7 +228,7 @@ void ClientMenu::searchClient() {
             if(tempClientNode != nullptr){
                 tempClient = clientListRef->findData(tempClientNode);
                 cout << "|Numero Telefonico  |Fecha de llamada   |Hora inicio de llamada|Duracion de llamada|" << endl;
-                clientListRef->showData(tempClientNode);
+                printClient(tempClientNode);
                 cin.ignore();
                 enterToContinue();
             } else {
@@ -249,7 +253,7 @@ void ClientMenu::searchClient() {
             if(tempClientNode != nullptr){
                 tempClient = clientListRef->findData(tempClientNode);
                 cout << "|Numero Telefonico  |Fecha de llamada   |Hora inicio de llamada|Duracion de llamada|" << endl;
-                clientListRef->showData(tempClientNode);
+                printClient(tempClientNode);
                 cin.ignore();
                 enterToContinue();
             } else {
@@ -274,7 +278,7 @@ void ClientMenu::searchClient() {
             if(tempClientNode != nullptr){
                 tempClient = clientListRef->findData(tempClientNode);
                 cout << "|Numero Telefonico  |Fecha de llamada   |Hora inicio de llamada|Duracion de llamada|" << endl;
-                clientListRef->showData(tempClientNode);
+                printClient(tempClientNode);
                 cin.ignore();
                 enterToContinue();
             } else {
@@ -287,6 +291,37 @@ void ClientMenu::searchClient() {
         default: {
             cin.ignore();
             enterToContinue();
+        }
+    }
+}
+
+void ClientMenu::printClient(ClientNode *clientNode) {
+    //prints data in this structure:
+    //|PhoneNumber|CallDate|CallStart|CallDuration|
+    //can always build it some day to calculate when the call ended
+    cout << "|" << clientNode->getData().getPhoneNumber();
+    cout.width(20 - clientNode->getData().getPhoneNumber().length());
+    cout << "|" << clientNode->getData().getCallDate().toString();
+    cout.width(20 - clientNode->getData().getCallDate().toString().length());
+    cout << "|" << clientNode->getData().getCallStart().toString();
+    cout.width(23 - clientNode->getData().getCallStart().toString().length());
+    cout << "|" << clientNode->getData().getCallDuration().toString();
+    cout.width(20 - clientNode->getData().getCallDuration().toString().length());
+    cout << "|" << endl;
+}
+
+void ClientMenu::printClients() {
+    ClientNode* temp(clientListRef->getFirstPos());
+    ClientNode* last(clientListRef->getLastPos());
+
+    //this is when there is only one client in the list
+    if(temp == last){
+        printClient(temp);
+    //multiple clients in the list
+    } else {
+        while(temp != nullptr){
+            printClient(temp);
+            temp = temp->getNext();
         }
     }
 }
@@ -328,7 +363,7 @@ void ClientMenu::mainClientMenu() {
                 system(CLEAR);
                 cout << "MOSTRAR CLIENTES" << endl;
                 cout << "|Numero Telefonico  |Fecha de llamada   |Hora inicio de llamada|Duracion de llamada|" << endl;
-                clientListRef->showAllData();
+                printClients();
                 cin.ignore();
                 enterToContinue();
                 break;

@@ -11,11 +11,21 @@ class AgentMenu {
 private:
     AgentList* agentListRef;
     static void enterToContinue();
+    //add an agent
     void addAgent();
+    //delete an agent
     void deleteAgent();
+    //modify any attribute of an agent
     void modifyAgent();
+    //search an agent by any attribute
     void searchAgent();
+    //sort agent, either by name or specialty
     void sortAgents();
+    //print one agent
+    static void printAgent(AgentNode* agentNode);
+    //print all the agents
+    void printAgents();
+    //main menu
     void mainAgentMenu();
 public:
     explicit AgentMenu(AgentList* agentList);

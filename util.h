@@ -12,7 +12,7 @@ enum opcionesSplash{
     SPLASH_WRITE
 };
 
-int countDigits(int n);
+int countDigits(long long n);
 
 bool verifyINT(int min, int max, int n);
 

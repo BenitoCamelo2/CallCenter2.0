@@ -10,23 +10,28 @@ using namespace std;
 
 class Client {
 private:
-    long long phoneNumber;
+    //client attributes
+    string phoneNumber;
     Time callDuration;
     Time callStart;
     Date callDate;
 public:
+    //CONSTRUCTORS
     Client();
     Client(const long long& phoneNumber, const Time& callStart, const Time& callDuration, const Date& callDate);
-    long long getPhoneNumber();
+    //GETTERS AND SETTERS
+    string getPhoneNumber();
     Time getCallStart();
     Time getCallDuration();
     Date getCallDate();
-    void setData(const long long& phoneNumber, const Time& callStart, const Time& callDuration, const Date& callDate);
-    void setPhoneNumber(const long long& phoneNumber);
+    void setData(const string& phoneNumber, const Time& callStart, const Time& callDuration, const Date& callDate);
+    void setPhoneNumber(const string& phoneNumber);
     void setCallStart(const Time& callStart);
     void setCallDuration(const Time& callDuration);
     void setCallDate(const Date& callDate);
+    //returns a string of the client data separated by |
     string toString();
+    //OPERATORS
     Client& operator = (const Client& client);
     bool operator == (const Client& client);
     bool operator != (const Client& client);

@@ -8,6 +8,7 @@ int Time::toInt() const {
     return hour * 100 + minute;
 }
 
+//default constructor sets the time to the system time
 Time::Time() {
     chrono::system_clock::time_point today = chrono::system_clock::now();
     time_t tt;
