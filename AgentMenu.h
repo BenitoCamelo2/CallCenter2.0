@@ -23,8 +23,10 @@ private:
     void sortAgents();
     //print one agent
     static void printAgent(AgentNode* agentNode);
+    static void printClient(ClientNode* clientNode);
     //print all the agents
-    void printAgents();
+    void printClients(AgentNode* agentNode);
+    void printAgents(char option);
     //main menu
     void mainAgentMenu();
 public:
@@ -61,6 +63,7 @@ enum {
     MODIFY_EXTENSION,
     MODIFY_EXTRA_HOURS,
     MODIFY_SPECIALTY,
+    MODIFY_CLIENTS,
     EXIT_MODIFY
 };
 

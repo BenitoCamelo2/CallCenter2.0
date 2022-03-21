@@ -15,6 +15,10 @@ bool ClientList::isValidPos(ClientNode *clientNode) {
 
 ClientList::ClientList() :header(nullptr) { }
 
+ClientList::ClientList(ClientList &clientList) {
+    copyAll(clientList);
+}
+
 ClientList::~ClientList() {
     delete header;
 }
@@ -105,22 +109,26 @@ void ClientList::deleteData(ClientNode *clientNode) {
     }
 }
 
-void ClientList::copyAll(const ClientList &clientList) {
-    ClientNode* temp1(clientList.header);
-    ClientNode* temp2;
+void ClientList::copyAll(const ClientList &clientList1) {
+    ClientNode* temp1(clientList1.header);
+    ClientNode* last(nullptr);
+    ClientNode* newNode;
 
-    temp1 = clientList.header;
-    header = temp1;
+    while(temp1 != nullptr){
+        newNode = new ClientNode(temp1->getData());
 
-    if(!isEmpty()){
-        temp2 = header;
-        while(temp1 != nullptr){
-            temp1 = getNextPos(temp1);
-            temp2->setNext(temp1);
-            temp2 = getNextPos(temp2);
+        if(newNode == nullptr){
+            throw ListException("No memoria disponible, copyAll()");
         }
-    } else {
-        delete header;
+
+        if(last == nullptr){
+            header = newNode;
+        } else {
+            last->setNext(newNode);
+        }
+
+        last = newNode;
+        temp1 = temp1->getNext();
     }
 }
 

@@ -36,6 +36,7 @@ void AgentList::sortBySpecialty(AgentNode *agent1, AgentNode *agent2) {
 AgentList::AgentList() : header(nullptr){}
 
 AgentList::~AgentList() {
+    deleteAll();
     delete header;
 }
 

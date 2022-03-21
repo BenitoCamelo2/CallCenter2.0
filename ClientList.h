@@ -19,6 +19,7 @@ private:
 public:
     //constructor, destructor
     ClientList();
+    ClientList(ClientList& clientList);
     ~ClientList();
     //returs if list is empty
     bool isEmpty();

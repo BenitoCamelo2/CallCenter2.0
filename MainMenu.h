@@ -19,17 +19,14 @@ using namespace std;
 class MainMenu {
 private:
     AgentList* agentList;
-    ClientList* clientList;
 public:
     MainMenu();
 
-    void mainMenu();
-    int mainMenuOptions();
+    void splashScreen();
 };
 
 enum{
     AGENTS = 1,
-    CLIENTS,
     EXIT
 };
 

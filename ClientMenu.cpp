@@ -1,4 +1,5 @@
 #include "ClientMenu.h"
+#include "AgentMenu.h"
 #include "util.h"
 
 #ifdef _WIN32
@@ -8,16 +9,6 @@
 #else
 #error "SO no soportado para limpiar pantalla"
 #endif
-
-enum{
-    ADD_CLIENT = 1,
-    DELETE_CLIENT,
-    MODIFY_CLIENT,
-    SEARCH_CLIENT,
-    SHOW_CLIENTS,
-    DELETE_ALL_CLIENTS,
-    EXIT_CLIENT
-};
 
 ClientMenu::ClientMenu(ClientList *clientList): clientListRef(clientList) {
     //inicializes main menu
@@ -41,15 +32,35 @@ void ClientMenu::addClient() {
     cout << "AGREGAR CLIENTE" << endl;
     cout << "Numero telefonico: ";
     cin.ignore();getline(cin, clientPhoneNumber);
+    while(clientPhoneNumber.length() < 10){
+        cout << "Ingresa de nuevo: ";
+        getline(cin, clientPhoneNumber);
+    }
     cout << "Hora de inicio de llamada: ";
     cin >> hour;
+    while(!verifyINT(0,23,hour)){
+        cout << "Ingresa de nuevo: ";
+        cin >> hour;
+    }
     cout << "Minuto de inicio de llamada: ";
     cin >> minute;
+    while(!verifyINT(0, 59, minute)){
+        cout << "Ingresa de nuevo: ";
+        cin >> minute;
+    }
     clientCallStart.setData(hour, minute);
     cout << "Horas de duracion de llamada: ";
     cin >> hour;
+    while(!verifyINT(0,23,hour)){
+        cout << "Ingresa de nuevo: ";
+        cin >> hour;
+    }
     cout << "Minutos de duracion de llamada: ";
     cin >> minute;
+    while(!verifyINT(0, 59, minute)){
+        cout << "Ingresa de nuevo: ";
+        cin >> minute;
+    }
     clientCallDuration.setData(hour, minute);
     cout << "Anio de llamada: ";
     cin >> year;
@@ -57,7 +68,16 @@ void ClientMenu::addClient() {
     cin >> month;
     cout << "Dia de llamada: ";
     cin >> day;
-    clientCallDate.setData(year, month, day);
+    while(!clientCallDate.setData(year, month, day)){
+        cout << "Ingresa de nuevo" << endl;
+        cout << "Anio de llamada: ";
+        cin >> year;
+        cout << "Mes de llamada: ";
+        cin >> month;
+        cout << "Dia de llamada: ";
+        cin >> day;
+    }
+
     tempClient.setData(clientPhoneNumber, clientCallStart, clientCallDuration, clientCallDate);
     clientListRef->insertOrdered(tempClient);
 }
@@ -115,7 +135,7 @@ void ClientMenu::modifyClient() {
         cout << "Opcion: ";
         cin >> opc;
         switch(opc){
-            case 1: {
+            case MODIFY_PHONE: {
                 string clientPhoneNumber;
                 tempClient1 = tempClientNode->getData();
                 cout << "Numero telefonico nuevo: ";
@@ -124,7 +144,7 @@ void ClientMenu::modifyClient() {
                 tempClientNode->setData(tempClient1);
                 break;
             }
-            case 2: {
+            case MODIFY_CALL_DATE: {
                 Date callDate;
                 int year, month, day;
                 tempClient1 = tempClientNode->getData();
@@ -139,7 +159,7 @@ void ClientMenu::modifyClient() {
                 tempClientNode->setData(tempClient1);
                 break;
             }
-            case 3: {
+            case MODIFY_CALL_START: {
                 Time callStart;
                 int hour, minute;
                 tempClient1 = tempClientNode->getData();
@@ -152,7 +172,7 @@ void ClientMenu::modifyClient() {
                 tempClientNode->setData(tempClient1);
                 break;
             }
-            case 4: {
+            case MODIFY_CALL_DURATION: {
                 Time callDuration;
                 int hour, minute;
                 tempClient1 = tempClientNode->getData();
@@ -191,7 +211,7 @@ void ClientMenu::searchClient() {
     cin >> opc;
 
     switch(opc){
-        case 1: {
+        case SEARCH_BY_PHONENUMBER: {
             string phoneNumber;
             Client tempClient = Client();
             ClientNode* tempClientNode = new ClientNode();
@@ -212,7 +232,7 @@ void ClientMenu::searchClient() {
             }
             break;
         }
-        case 2: {
+        case SEARCH_BY_CALLDATE: {
             int year, month, day;
             Date callDate;
             Client tempClient = Client();
@@ -239,7 +259,7 @@ void ClientMenu::searchClient() {
             }
             break;
         }
-        case 3: {
+        case SEARCH_BY_CALLSTART: {
             int hour, minute;
             Time callStart;
             Client tempClient = Client();
@@ -264,7 +284,7 @@ void ClientMenu::searchClient() {
             }
             break;
         }
-        case 4: {
+        case SEARCH_BY_CALLDURATION: {
             int hour, minute;
             Time callDuration;
             Client tempClient = Client();
@@ -328,7 +348,7 @@ void ClientMenu::printClients() {
             }
         }
     } else {
-        cout << "No hay agentes en la lista" << endl;
+        cout << "No hay clientes en la lista" << endl;
     }
 }
 

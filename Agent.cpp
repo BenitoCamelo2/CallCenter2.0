@@ -8,6 +8,7 @@ Agent::Agent() {
     extension = 0;
     extraHours = 0;
     specialty = 0;
+    clientList = ClientList();
 }
 
 Agent::Agent(const Agent &agent) {
@@ -18,6 +19,7 @@ Agent::Agent(const Agent &agent) {
     this->extension = agent.extension;
     this->extraHours = agent.extraHours;
     this->specialty = agent.specialty;
+    this->clientList = agent.clientList;
 }
 
 string Agent::getCode() {
@@ -46,6 +48,10 @@ int Agent::getExtraHours() {
 
 int Agent::getSpecialty() {
     return specialty;
+}
+
+ClientList& Agent::getClientList() {
+    return clientList;
 }
 
 void Agent::setData(string &code, const Name &name, const Time &startTime, const Time &endTime, int &extension,
@@ -87,6 +93,10 @@ void Agent::addExtraHours(int &extraHours) {
     this->extraHours += extraHours;
 }
 
+void Agent::setClientList(ClientList &clientList) {
+    this->clientList = clientList;
+}
+
 Agent &Agent::operator=(const Agent &agent) {
     extension = agent.extension;
     code = agent.code;
@@ -95,6 +105,7 @@ Agent &Agent::operator=(const Agent &agent) {
     endTime = agent.endTime;
     extraHours = agent.extraHours;
     specialty = agent.specialty;
+    clientList = agent.clientList;
 
     return *this;
 }

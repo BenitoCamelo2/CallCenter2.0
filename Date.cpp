@@ -11,19 +11,13 @@ bool Date::isValid(const int &y, const int &m, const int &d) {
     }
     if(m == 2){
         if(((y % 4 == 0) && (y % 100 != 0)) || (y % 400 == 0)){
-            if(d > 29){
-                return false;
-            }
+            return(d <= 29);
         } else {
-            if (d > 30){
-                return false;
-            }
+            return(d <= 28);
         }
     }
     if(m == 4 || m == 6 || m == 9 || m == 11){
-        if(d > 30){
-            return false;
-        }
+        return(d <= 30);
     }
     return true;
 }

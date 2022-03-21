@@ -6,6 +6,7 @@
 #include "Name.h"
 #include "Time.h"
 #include "Date.h"
+#include "ClientList.h"
 
 using namespace std;
 
@@ -18,6 +19,7 @@ private:
     int extension;
     int extraHours;
     int specialty;
+    ClientList clientList;
 public:
     //CONSTRUCTORS
     Agent();
@@ -30,6 +32,7 @@ public:
     int getExtension();
     int getExtraHours();
     int getSpecialty();
+    ClientList& getClientList();
     void setData(string& code, const Name& name, const Time& startTime, const Time& endTime,
                  int& extension, int& extraHours, int& specialty);
     void setCode(string& code);
@@ -39,6 +42,7 @@ public:
     void setExtension(int& extension);
     void addExtraHours(int& extraHours);
     void setSpecialty(int& specialty);
+    void setClientList(ClientList& clientList);
     //returns the agent in string form
     string toString();
     //OPERATORS

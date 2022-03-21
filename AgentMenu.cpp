@@ -1,4 +1,5 @@
 #include "AgentMenu.h"
+#include "ClientMenu.h"
 #include "util.h"
 
 #ifdef _WIN32
@@ -26,6 +27,7 @@ void AgentMenu::addAgent() {
     Name name;
     Time startTime, endTime;
     int extension, extraHours, specialty, tempHour, tempMinute, codeINT;
+    char option;
 
     system(CLEAR);
     cout << "AGREGAR AGENTE" << endl;
@@ -107,6 +109,13 @@ void AgentMenu::addAgent() {
         cin >> specialty;
     }
 
+    cout << "Guste agregar clientes al agente? (S/N): ";
+    cin >> option;
+
+    if(option == 's' || option == 'S'){
+        new ClientMenu(&tempAgent.getClientList());
+    }
+
     tempAgent.setData(codeSTR, name, startTime, endTime, extension, extraHours, specialty);
     agentListRef->insertData(agentListRef->getFirstPos(), tempAgent);
 }
@@ -121,7 +130,7 @@ void AgentMenu::deleteAgent() {
 
     system(CLEAR);
     cout << "ELIMINAR AGENTE" << endl << endl;
-    printAgents();
+    printAgents('\0');
     cout << "Ingresa el codigo del agente que desea eliminar: ";
     cin.ignore();getline(cin, code);
     //while loop to make sure the code entered is valid
@@ -149,9 +158,10 @@ void AgentMenu::modifyAgent() {
     string agentCode;
     Agent tempAgent;
 
+    //chose agent to modify
     system(CLEAR);
     cout << "MODIFICAR AGENTE" << endl;
-    printAgents();
+    printAgents('\0');
     cout << "Ingresa el codigo: ";
     cin.ignore();getline(cin, agentCode);
     tempAgent.setCode(agentCode);
@@ -183,7 +193,8 @@ void AgentMenu::modifyAgent() {
         cout << "5. Extension" << endl;
         cout << "6. Horas extras" << endl;
         cout << "7. Especialidad" << endl;
-        cout << "8. Regresar" << endl;
+        cout << "8. Clientes" << endl;
+        cout << "9. Regresar" << endl;
         cout << "Opcion: ";
         cin >> option;
         switch(option){
@@ -279,6 +290,10 @@ void AgentMenu::modifyAgent() {
                 tempAgent.setSpecialty(specialty);
                 break;
             }
+            case MODIFY_CLIENTS: {
+                new ClientMenu(&tempAgent.getClientList());
+                break;
+            }
             case EXIT_MODIFY: {
                 temp->setData(tempAgent);
                 terminate = true;
@@ -333,7 +348,7 @@ void AgentMenu::searchAgent() {
                 break;
             }
             case SEARCH_LAST_NAME: {
-                string lastName, firstName = "";
+                string lastName, firstName;
                 Name name;
                 Agent tempAgent;
 
@@ -443,26 +458,94 @@ void AgentMenu::printAgent(AgentNode* agentNode) {
     cout << "|" << endl;
 }
 
-void AgentMenu::printAgents() {
+void AgentMenu::printClient(ClientNode* clientNode){
+    //prints data in this structure:
+    //|PhoneNumber|CallDate|CallStart|CallDuration|
+    //can always build it some day to calculate when the call ended
+    cout << "|" << clientNode->getData().getPhoneNumber();
+    cout.width(20 - clientNode->getData().getPhoneNumber().length());
+    cout << "|" << clientNode->getData().getCallDate().toString();
+    cout.width(20 - clientNode->getData().getCallDate().toString().length());
+    cout << "|" << clientNode->getData().getCallStart().toString();
+    cout.width(23 - clientNode->getData().getCallStart().toString().length());
+    cout << "|" << clientNode->getData().getCallDuration().toString();
+    cout.width(20 - clientNode->getData().getCallDuration().toString().length());
+    cout << "|" << endl;
+}
+
+void AgentMenu::printAgents(char option) {
     AgentNode* temp(agentListRef->getFirstPos());
     AgentNode* last(agentListRef->getLastPos());
 
     //makes sure there is at least 1 agent, or else it breaks
     if(temp != nullptr) {
         //prints the first line of the list, which shows the categories
+        cout << "-----------------------------------------------------------------------------------------------" << endl;
         agentListHeader();
         //in this case there is only one element in the list
         if (temp == last) {
-            printAgent(temp);
-            //more than one element in the list
-        } else {
-            while (temp != nullptr) {
+            if(option == 's' || option == 'S'){
                 printAgent(temp);
-                temp = temp->getNext();
+                if(temp->getData().getClientList().getFirstPos() != nullptr) {
+                    cout << "\t";
+                    cout << "------------------------------------------------------------------------------------" << endl;
+                    cout << "\t";
+                    clientListHeader();
+                    printClients(temp);
+                    cout << endl;
+                }
+            } else {
+                printAgent(temp);
+            }
+        //more than one element in the list
+        } else {
+            if(option == 's' || option == 'S'){
+                while (temp != nullptr) {
+                    agentListHeader();
+                    printAgent(temp);
+                    if(temp->getData().getClientList().getFirstPos() != nullptr) {
+                        cout << "\t";
+                        cout << "------------------------------------------------------------------------------------" << endl;
+                        cout << "\t";
+                        clientListHeader();
+                        printClients(temp);
+                        cout << endl;
+                    }
+                    temp = temp->getNext();
+                }
+
+            } else {
+                while (temp != nullptr) {
+                    printAgent(temp);
+                    temp = temp->getNext();
+                }
             }
         }
     } else {
         cout << "No hay agentes en la lista" << endl;
+    }
+}
+
+void AgentMenu::printClients(AgentNode* agentNode){
+    ClientNode* temp(agentNode->getData().getClientList().getFirstPos());
+    ClientNode* last(agentNode->getData().getClientList().getLastPos());
+
+    //makes sure there are nodes in the list
+    if(temp != nullptr) {
+        //this is when there is only one client in the list
+        if (temp == last) {
+            cout << "\t";
+            printClient(temp);
+        //multiple clients in the list
+        } else {
+            while (temp != nullptr) {
+                cout << "\t";
+                printClient(temp);
+                temp = temp->getNext();
+            }
+        }
+    } else {
+        cout << "No hay clientes en la lista" << endl;
     }
 }
 
@@ -507,7 +590,10 @@ void AgentMenu::mainAgentMenu() {
                 break;
             }
             case SHOW_AGENTS: {
-                printAgents();
+                char options;
+                cout << "Guste ver los clientes tambien? (S/N): ";
+                cin >> options;
+                printAgents(options);
                 cin.ignore();
                 enterToContinue();
                 break;
@@ -530,6 +616,7 @@ void AgentMenu::mainAgentMenu() {
             default: {
                 cout << "Opcion invalida" << endl;
                 enterToContinue();
+                break;
             }
         }
     }while(!terminate);
