@@ -113,7 +113,7 @@ void AgentMenu::addAgent() {
     cin >> option;
 
     if(option == 's' || option == 'S'){
-        new ClientMenu(&tempAgent.getClientList());
+        new ClientMenu(tempAgent.getClientList());
     }
 
     tempAgent.setData(codeSTR, name, startTime, endTime, extension, extraHours, specialty);
@@ -291,7 +291,7 @@ void AgentMenu::modifyAgent() {
                 break;
             }
             case MODIFY_CLIENTS: {
-                new ClientMenu(&tempAgent.getClientList());
+                new ClientMenu(tempAgent.getClientList());
                 break;
             }
             case EXIT_MODIFY: {
@@ -449,8 +449,37 @@ void AgentMenu::printAgent(AgentNode* agentNode) {
     cout.width(20 - agentNode->getData().getName().toString().size());
     cout << "|" << agentNode->getData().getCode();
     cout.width(20 - agentNode->getData().getCode().size());
-    cout << "|" << agentNode->getData().getSpecialty();
-    cout.width(20 - countDigits(agentNode->getData().getSpecialty()));
+    cout << "|";
+    switch(agentNode->getData().getSpecialty()){
+        case SERVIDORES: {
+            cout << "Servidores         ";
+            break;
+        }
+        case ESCRITORIO: {
+            cout << "Escritorio         ";
+            break;
+        }
+        case PORTATILES: {
+            cout << "Portatiles         ";
+            break;
+        }
+        case LINUX: {
+            cout << "Linux              ";
+            break;
+        }
+        case IMPRESORAS: {
+            cout << "Impresoras         ";
+            break;
+        }
+        case REDES: {
+            cout << "Redes              ";
+            break;
+        }
+        default: {
+            cout << "ERROR";
+            break;
+        }
+    }
     cout << "|" << agentNode->getData().getStartTime().toString();
     cout << " - " << agentNode->getData().getEndTime().toString();
     cout << "|" << agentNode->getData().getExtraHours();
@@ -486,7 +515,7 @@ void AgentMenu::printAgents(char option) {
         if (temp == last) {
             if(option == 's' || option == 'S'){
                 printAgent(temp);
-                if(temp->getData().getClientList().getFirstPos() != nullptr) {
+                if(temp->getData().getClientList()->getFirstPos() != nullptr) {
                     cout << "\t";
                     cout << "------------------------------------------------------------------------------------" << endl;
                     cout << "\t";
@@ -503,7 +532,7 @@ void AgentMenu::printAgents(char option) {
                 while (temp != nullptr) {
                     agentListHeader();
                     printAgent(temp);
-                    if(temp->getData().getClientList().getFirstPos() != nullptr) {
+                    if(temp->getData().getClientList()->getFirstPos() != nullptr) {
                         cout << "\t";
                         cout << "------------------------------------------------------------------------------------" << endl;
                         cout << "\t";
@@ -527,8 +556,8 @@ void AgentMenu::printAgents(char option) {
 }
 
 void AgentMenu::printClients(AgentNode* agentNode){
-    ClientNode* temp(agentNode->getData().getClientList().getFirstPos());
-    ClientNode* last(agentNode->getData().getClientList().getLastPos());
+    ClientNode* temp(agentNode->getData().getClientList()->getFirstPos());
+    ClientNode* last(agentNode->getData().getClientList()->getLastPos());
 
     //makes sure there are nodes in the list
     if(temp != nullptr) {
@@ -620,8 +649,4 @@ void AgentMenu::mainAgentMenu() {
             }
         }
     }while(!terminate);
-}
-
-AgentList* AgentMenu::getAgentList() {
-    return agentListRef;
 }

@@ -31,7 +31,6 @@ private:
     void mainAgentMenu();
 public:
     explicit AgentMenu(AgentList* agentList);
-    AgentList* getAgentList();
 };
 
 enum{
@@ -65,6 +64,15 @@ enum {
     MODIFY_SPECIALTY,
     MODIFY_CLIENTS,
     EXIT_MODIFY
+};
+
+enum{
+    SERVIDORES = 1,
+    ESCRITORIO,
+    PORTATILES,
+    LINUX,
+    IMPRESORAS,
+    REDES
 };
 
 

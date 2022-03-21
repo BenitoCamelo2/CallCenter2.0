@@ -21,7 +21,7 @@ public:
     //GETTERS AND SETTERS
     int getHour();
     int getMinute();
-    void setData(const int& hour, const int& minute);
+    bool setData(const int& hour, const int& minute);
     //returns time in HH:MM form, even 2:8 is displayed as 02:08
     string toString();
     //OPERATORS

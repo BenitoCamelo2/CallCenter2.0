@@ -279,6 +279,7 @@ void AgentList::deleteAll() {
         temp = getNextPos(temp);
         delete prev;
     }
+    header = nullptr;
 }
 
 void AgentList::writeToDisk(const string &data) {

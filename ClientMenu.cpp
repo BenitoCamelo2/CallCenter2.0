@@ -117,6 +117,7 @@ void ClientMenu::modifyClient() {
     string phoneNumber;
     system(CLEAR);
     cout << "MODIFICAR CLIENTE" << endl << endl;
+    clientListHeader();
     printClients();
     cout << "Numero telefonico: ";
     cin.ignore();getline(cin, phoneNumber);
@@ -139,9 +140,12 @@ void ClientMenu::modifyClient() {
                 string clientPhoneNumber;
                 tempClient1 = tempClientNode->getData();
                 cout << "Numero telefonico nuevo: ";
-                cin.ignore();getline(cin, phoneNumber);
+                cin.ignore();getline(cin, clientPhoneNumber);
+                while(clientPhoneNumber.length() > 10){
+                    cout << "Ingresa de nuevo: ";
+                    getline(cin, clientPhoneNumber);
+                }
                 tempClient1.setPhoneNumber(clientPhoneNumber);
-                tempClientNode->setData(tempClient1);
                 break;
             }
             case MODIFY_CALL_DATE: {
@@ -156,7 +160,6 @@ void ClientMenu::modifyClient() {
                 cin >> day;
                 callDate.setData(year, month, day);
                 tempClient1.setCallDate(callDate);
-                tempClientNode->setData(tempClient1);
                 break;
             }
             case MODIFY_CALL_START: {
@@ -169,7 +172,6 @@ void ClientMenu::modifyClient() {
                 cin >> minute;
                 callStart.setData(hour, minute);
                 tempClient1.setCallStart(callStart);
-                tempClientNode->setData(tempClient1);
                 break;
             }
             case MODIFY_CALL_DURATION: {
@@ -182,7 +184,6 @@ void ClientMenu::modifyClient() {
                 cin >> minute;
                 callDuration.setData(hour, minute);
                 tempClient1.setCallDuration(callDuration);
-                tempClientNode->setData(tempClient1);
                 break;
             }
             default: {
@@ -190,6 +191,7 @@ void ClientMenu::modifyClient() {
                 break;
             }
         }
+        tempClientNode->setData(tempClient1);
     } else {
         cout << "Cliente no encontrado" << endl;
         cin.ignore();
@@ -409,8 +411,4 @@ void ClientMenu::mainClientMenu() {
             }
         }
     }while(!terminate);
-}
-
-ClientList* ClientMenu::getClientList() {
-    return clientListRef;
 }

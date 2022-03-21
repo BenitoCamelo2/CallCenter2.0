@@ -29,7 +29,6 @@ private:
     void mainClientMenu();
 public:
     explicit ClientMenu(ClientList* clientList);
-    ClientList* getClientList();
 };
 
 enum{

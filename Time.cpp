@@ -35,9 +35,14 @@ int Time::getMinute() {
     return minute;
 }
 
-void Time::setData(const int &h, const int &m) {
-    hour = h;
-    minute = m;
+bool Time::setData(const int &h, const int &m) {
+    if(h < 24 && h >= 0 && m < 60 && m >= 0){
+        hour = h;
+        minute = m;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 string Time::toString() {

@@ -8,7 +8,7 @@ Agent::Agent() {
     extension = 0;
     extraHours = 0;
     specialty = 0;
-    clientList = ClientList();
+    clientList = new ClientList();
 }
 
 Agent::Agent(const Agent &agent) {
@@ -50,7 +50,7 @@ int Agent::getSpecialty() {
     return specialty;
 }
 
-ClientList& Agent::getClientList() {
+ClientList* Agent::getClientList() {
     return clientList;
 }
 
@@ -93,7 +93,7 @@ void Agent::addExtraHours(int &extraHours) {
     this->extraHours += extraHours;
 }
 
-void Agent::setClientList(ClientList &clientList) {
+void Agent::setClientList(ClientList *clientList) {
     this->clientList = clientList;
 }
 
