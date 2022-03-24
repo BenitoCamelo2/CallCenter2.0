@@ -28,40 +28,43 @@ void ClientMenu::addClient() {
     Time clientCallDuration, clientCallStart;
     Date clientCallDate;
 
+    //Entrance of data
     system(CLEAR);
     cout << "AGREGAR CLIENTE" << endl;
     cout << "Numero telefonico: ";
     cin.ignore();getline(cin, clientPhoneNumber);
+
+    //verification of phone number length
     while(clientPhoneNumber.length() < 10){
         cout << "Ingresa de nuevo: ";
         getline(cin, clientPhoneNumber);
     }
+
+    //register of start time, with verification
     cout << "Hora de inicio de llamada: ";
     cin >> hour;
-    while(!verifyINT(0,23,hour)){
-        cout << "Ingresa de nuevo: ";
-        cin >> hour;
-    }
     cout << "Minuto de inicio de llamada: ";
     cin >> minute;
-    while(!verifyINT(0, 59, minute)){
-        cout << "Ingresa de nuevo: ";
+    while(!clientCallStart.setData(hour, minute)){
+        cout << "Ingresa la hora de nuevo: ";
+        cin >> hour;
+        cout << "Ingresa el minuto de nuevo: ";
         cin >> minute;
     }
-    clientCallStart.setData(hour, minute);
+
+    //register of call duration, with verification
     cout << "Horas de duracion de llamada: ";
     cin >> hour;
-    while(!verifyINT(0,23,hour)){
-        cout << "Ingresa de nuevo: ";
-        cin >> hour;
-    }
     cout << "Minutos de duracion de llamada: ";
     cin >> minute;
-    while(!verifyINT(0, 59, minute)){
-        cout << "Ingresa de nuevo: ";
+    while(!clientCallDuration.setData(hour, minute)){
+        cout << "Ingresa la hora de nuevo: ";
+        cin >> hour;
+        cout << "Ingresa el minuto de nuevo: ";
         cin >> minute;
     }
-    clientCallDuration.setData(hour, minute);
+
+    //register of the call date, with verification
     cout << "Anio de llamada: ";
     cin >> year;
     cout << "Mes de llamada: ";
@@ -86,13 +89,27 @@ void ClientMenu::deleteClient() {
     Client tempClient1 = Client();
     ClientNode* tempClientNode;
     string phoneNumber;
+
+    //creation of temp client to find and delete the desired one
     cout << "ELIMINAR CLIENTE" << endl;
+    //prints client to find the client
     printClients();
     cout << "Numero telefonico: ";
     cin.ignore();getline(cin, phoneNumber);
+    while(phoneNumber.length() > 10){
+        cout << "Ingresa de nuevo: ";
+        getline(cin, phoneNumber);
+    }
+
+    //assign phone number
     tempClient1.setPhoneNumber(phoneNumber);
+
+    //search client by phone number and get list position
     tempClientNode = clientListRef->retrievePos(tempClient1, 1);
+
+    //if the client is found, it has a valid position, or else its a nullptr
     if(tempClientNode != nullptr){
+        //prints client data and verifies the deletion
         char exit = '\0';
         clientListHeader();
         printClient(tempClientNode);
@@ -100,11 +117,14 @@ void ClientMenu::deleteClient() {
         cin >> exit;
         cin.ignore();
         if(exit == 'S' || exit == 's'){
+            //deletes
             clientListRef->deleteData(tempClientNode);
         } else {
+            //if client types anything but 's', it will cancel
             enterToContinue();
         }
     } else {
+        //client was not found
         cout << "Cliente no encontrado" << endl;
         cin.ignore();
         enterToContinue();
@@ -115,15 +135,24 @@ void ClientMenu::modifyClient() {
     Client tempClient1 = Client();
     ClientNode* tempClientNode;
     string phoneNumber;
+
+    //modifying of a client
     system(CLEAR);
     cout << "MODIFICAR CLIENTE" << endl << endl;
     clientListHeader();
-    printClients();
+    printClients(); //prints clients for user to choose
     cout << "Numero telefonico: ";
     cin.ignore();getline(cin, phoneNumber);
+    while(phoneNumber.length() > 10){ //if phone number is longer than 10 digits, it requests to enter data again
+        cout << "Ingresa de nuevo: ";
+        getline(cin, phoneNumber);
+    }
     tempClient1.setPhoneNumber(phoneNumber);
+    //finds the client position
     tempClientNode = clientListRef->retrievePos(tempClient1, 1);
+    //if the client is not found, it returns nullptr
     if(tempClientNode != nullptr){
+        //choose what to change
         int opc;
         system(CLEAR);
         cout << "MODIFICAR " << tempClientNode->getData().getPhoneNumber() << endl;
@@ -136,6 +165,7 @@ void ClientMenu::modifyClient() {
         cout << "Opcion: ";
         cin >> opc;
         switch(opc){
+            //modify the phone number
             case MODIFY_PHONE: {
                 string clientPhoneNumber;
                 tempClient1 = tempClientNode->getData();
@@ -148,6 +178,7 @@ void ClientMenu::modifyClient() {
                 tempClient1.setPhoneNumber(clientPhoneNumber);
                 break;
             }
+            //modify the call date
             case MODIFY_CALL_DATE: {
                 Date callDate;
                 int year, month, day;
@@ -162,6 +193,7 @@ void ClientMenu::modifyClient() {
                 tempClient1.setCallDate(callDate);
                 break;
             }
+            //modify the call start time
             case MODIFY_CALL_START: {
                 Time callStart;
                 int hour, minute;
@@ -174,6 +206,7 @@ void ClientMenu::modifyClient() {
                 tempClient1.setCallStart(callStart);
                 break;
             }
+            //modify the call duration
             case MODIFY_CALL_DURATION: {
                 Time callDuration;
                 int hour, minute;
@@ -202,6 +235,8 @@ void ClientMenu::modifyClient() {
 void ClientMenu::searchClient() {
     system(CLEAR);
     int opc;
+
+    //search client, user chooses what to search by
     cout << "BUSCAR CLIENTE" << endl;
     cout << "Buscar por: " << endl;
     cout << "1. Numero telefonico" << endl;
@@ -212,6 +247,7 @@ void ClientMenu::searchClient() {
     cout << "Opcion: ";
     cin >> opc;
 
+    //switch depending on what selected
     switch(opc){
         case SEARCH_BY_PHONENUMBER: {
             string phoneNumber;
@@ -219,7 +255,12 @@ void ClientMenu::searchClient() {
             ClientNode* tempClientNode = new ClientNode();
             cout << "Numero telefonico: ";
             cin.ignore();getline(cin, phoneNumber);
+            while(phoneNumber.length() > 10){
+                cout << "Ingresa de nuevo: ";
+                cin >> phoneNumber;
+            }
             tempClient.setPhoneNumber(phoneNumber);
+            //finds the client and prints the clients data
             tempClientNode = clientListRef->retrievePos(tempClient, 1);
             if(tempClientNode != nullptr){
                 tempClient = clientListRef->findData(tempClientNode);
@@ -234,6 +275,7 @@ void ClientMenu::searchClient() {
             }
             break;
         }
+        //search by call date
         case SEARCH_BY_CALLDATE: {
             int year, month, day;
             Date callDate;
@@ -245,8 +287,16 @@ void ClientMenu::searchClient() {
             cin >> month;
             cout << "Dia: ";
             cin >> day;
-            callDate.setData(year, month, day);
+            while(!callDate.setData(year, month, day)){
+                cout << "Ingresa el anio de nuevo: ";
+                cin >> year;
+                cout << "Ingresa el mes de nuevo: ";
+                cin >> month;
+                cout << "Ingresa el dia de nuevo: ";
+                cin >> day;
+            }
             tempClient.setCallDate(callDate);
+            //finds client and displays data
             tempClientNode = clientListRef->retrievePos(tempClient, 2);
             if(tempClientNode != nullptr){
                 tempClient = clientListRef->findData(tempClientNode);
@@ -261,6 +311,7 @@ void ClientMenu::searchClient() {
             }
             break;
         }
+        //search by call date
         case SEARCH_BY_CALLSTART: {
             int hour, minute;
             Time callStart;
@@ -270,8 +321,14 @@ void ClientMenu::searchClient() {
             cin >> hour;
             cout << "Minuto: ";
             cin >> minute;
-            callStart.setData(hour, minute);
+            while(!callStart.setData(hour, minute)){
+                cout << "Ingresa la hora de nuevo: ";
+                cin >> hour;
+                cout << "Ingresa el minuto de nuevo: ";
+                cin >> minute;
+            }
             tempClient.setCallStart(callStart);
+            //find client data and display the client
             tempClientNode = clientListRef->retrievePos(tempClient, 3);
             if(tempClientNode != nullptr){
                 tempClient = clientListRef->findData(tempClientNode);
@@ -286,17 +343,26 @@ void ClientMenu::searchClient() {
             }
             break;
         }
+        //search by call duration
         case SEARCH_BY_CALLDURATION: {
             int hour, minute;
             Time callDuration;
             Client tempClient = Client();
             ClientNode* tempClientNode = new ClientNode();
+
             cout << "Hora: ";
             cin >> hour;
             cout << "Minuto: ";
             cin >> minute;
-            callDuration.setData(hour, minute);
+
+            while(!callDuration.setData(hour, minute)){
+                cout << "Ingresa la hora de nuevo: ";
+                cin >> hour;
+                cout << "Ingresa el minuto de nuevo: ";
+                cin >> minute;
+            }
             tempClient.setCallDuration(callDuration);
+            //find the client data and display the data
             tempClientNode = clientListRef->retrievePos(tempClient, 4);
             if(tempClientNode != nullptr){
                 tempClient = clientListRef->findData(tempClientNode);
@@ -357,6 +423,7 @@ void ClientMenu::printClients() {
 void ClientMenu::mainClientMenu() {
     bool terminate = false;
 
+    //main client menu
     do{
         int opc = 0;
         system(CLEAR);
@@ -370,6 +437,7 @@ void ClientMenu::mainClientMenu() {
         cout << "7. Regresar" << endl;
         cout << "Option: ";
         cin >> opc;
+        //options of the client menu, should be easily understood
         switch(opc){
             case ADD_CLIENT: {
                 addClient();

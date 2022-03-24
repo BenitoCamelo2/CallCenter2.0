@@ -53,37 +53,32 @@ void AgentMenu::addAgent() {
     //hour of when shift starts
     cout << "Hora de inicio de horario: ";
     cin >> tempHour;
-    while(!verifyINT(0, 23, tempHour)){
-        cout << "Ingresa de nuevo: ";
-        cin >> tempHour;
-    }
 
     //minute of when shift starts
     cout << "Minuto de  de horario: ";
     cin >> tempMinute;
-    while(!verifyINT(0, 59, tempMinute)){
-        cout << "Ingresa de nuevo: ";
+
+    while(!startTime.setData(tempHour, tempMinute)){
+        cout << "Ingresa la hora de nuevo: ";
+        cin >> tempHour;
+        cout << "Ingresa el minuto de nuevo: ";
         cin >> tempMinute;
     }
-    startTime.setData(tempHour, tempMinute);
 
 
     //hour of when shift ends
     cout << "Hora de fin de horario: ";
     cin >> tempHour;
-    while(!verifyINT(0, 23, tempHour)){
-        cout << "Ingresa de nuevo: ";
-        cin >> tempHour;
-    }
-
     //minute of when shift ends
     cout << "Minuto de fin de horario: ";
     cin >> tempMinute;
-    while(!verifyINT(0, 59, tempMinute)){
-        cout << "Ingresa de nuevo: ";
+
+    while(!endTime.setData(tempHour, tempMinute)){
+        cout << "Ingresa la hora de nuevo: ";
+        cin >> tempHour;
+        cout << "Ingresa el minuto de nuevo: ";
         cin >> tempMinute;
     }
-    endTime.setData(tempHour, tempMinute);
 
     //extension
     cout << "Extension: ";
@@ -234,7 +229,13 @@ void AgentMenu::modifyAgent() {
                 cin >> hour;
                 cout << "Ingresa el minuto: ";
                 cin >> minute;
-                startTime.setData(hour, minute);
+
+                while(!startTime.setData(hour, minute)){
+                    cout << "Ingresa la hora de nuevo: ";
+                    cin >> hour;
+                    cout << "Ingresa el minuto de nuevo: ";
+                    cin >> minute;
+                }
 
                 tempAgent.setStartTime(startTime);
                 break;
@@ -247,7 +248,13 @@ void AgentMenu::modifyAgent() {
                 cin >> hour;
                 cout << "Ingresa el minuto: ";
                 cin >> minute;
-                endTime.setData(hour, minute);
+
+                while(!endTime.setData(hour, minute)){
+                    cout << "Ingresa la hora de nuevo: ";
+                    cin >> hour;
+                    cout << "Ingresa el minuto de nuevo: ";
+                    cin >> minute;
+                }
 
                 tempAgent.setEndTime(endTime);
                 break;
@@ -369,7 +376,11 @@ void AgentMenu::searchAgent() {
 
                 cout << "Ingresa la hora de inicio: ";
                 cin >> hour;
-                time.setData(hour, minute);
+
+                while(!time.setData(hour, minute)){
+                    cout << "Ingresa la hora de nuevo: ";
+                    cin >> hour;
+                }
                 tempAgent.setStartTime(time);
 
                 agentListHeader();
@@ -384,7 +395,11 @@ void AgentMenu::searchAgent() {
 
                 cout << "Ingresa la hora de fin: ";
                 cin >> hour;
-                time.setData(hour, minute);
+
+                while(!time.setData(hour, minute)){
+                    cout << "Ingresa la hora de nuevo: ";
+                    cin >> hour;
+                }
                 tempAgent.setEndTime(time);
 
                 agentListHeader();
