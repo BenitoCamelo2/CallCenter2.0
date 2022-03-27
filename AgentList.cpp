@@ -21,16 +21,85 @@ void AgentList::copyAll(const AgentList &agentList) {
 
 }
 
-void AgentList::swapPtr(AgentNode *agent1, AgentNode *agent2) {
+AgentNode* AgentList::mergeName(AgentNode *first, AgentNode *second) {
+    if(!first){
+        return second;
+    }
 
+    if(!second){
+        return first;
+    }
+
+    if(first->getData().getName() < second->getData().getName()){
+        first->setNext(mergeName(first->getNext(), second));
+        first->getNext()->setPrev(first);
+        first->setPrev(nullptr);
+        return first;
+    } else {
+        second->setNext(mergeName(first, second->getNext()));
+        second->getNext()->setPrev(second);
+        second->setPrev(nullptr);
+        return second;
+    }
 }
 
-void AgentList::sortByName(AgentNode *agent1, AgentNode *agent2) {
+AgentNode* AgentList::mergeSpecialty(AgentNode *first, AgentNode *second) {
+    //if list is empty
+    if(!first){
+        return second;
+    }
 
+    //if there is only one element
+    if(!second){
+        return first;
+    }
+
+    //chooses which is greater
+    if(first->getData().getSpecialty() < second->getData().getSpecialty()){
+        first->setNext(mergeSpecialty(first->getNext(), second));
+        first->getNext()->setPrev(first);
+        first->setPrev(nullptr);
+        return first;
+    } else {
+        second->setNext(mergeSpecialty(first, second->getNext()));
+        second->getNext()->setPrev(second);
+        second->setPrev(nullptr);
+        return second;
+    }
 }
 
-void AgentList::sortBySpecialty(AgentNode *agent1, AgentNode *agent2) {
+AgentNode* AgentList::mergeSort(AgentNode *head, int option) {
+    if(!head || !head->getNext()){
+        return head;
+    }
+    AgentNode* second = split(head);
 
+    //recursive for left and right halves
+    head = mergeSort(head, option);
+    second = mergeSort(second, option);
+
+    //return merged halves depending on name sort or specialty sort
+    if(option == SORT_NAME){
+        return mergeName(head, second);
+    } else if (option == SORT_SPECIALTY){
+        return mergeSpecialty(head, second);
+    } else {
+        return nullptr;
+    }
+}
+
+AgentNode* AgentList::split(AgentNode *head) {
+    AgentNode* fast(head);
+    AgentNode* slow(head);
+
+    //split list in half and return middle element
+    while(fast->getNext() && fast->getNext()->getNext()){
+        fast = fast->getNext()->getNext();
+        slow = slow->getNext();
+    }
+    AgentNode* temp(slow->getNext());
+    slow->setNext(nullptr);
+    return temp;
 }
 
 AgentList::AgentList() : header(nullptr){}
@@ -226,7 +295,7 @@ AgentNode *AgentList::findData(Agent &agent, int option) {
         }
         //shouldn't happen, would be unfortunate
         default: {
-            cout << "Error al buscar agente" << endl;
+            ListException("Error al buscar un agente");
             cin.ignore();
             cout << "Ingresa una tecla para continuar..." << endl;
             getchar();
@@ -250,11 +319,11 @@ Agent AgentList::retrieve(AgentNode *agentNode) {
 }
 
 void AgentList::sortByName() {
-
+    header = mergeSort(getFirstPos(), SORT_NAME);
 }
 
 void AgentList::sortBySpecialty() {
-
+    header = mergeSort(getFirstPos(), SORT_SPECIALTY);
 }
 
 string AgentList::toString() {

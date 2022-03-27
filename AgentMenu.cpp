@@ -464,6 +464,7 @@ void AgentMenu::sortAgents() {
         cout << "ORGANIZAR AGENTES" << endl;
         cout << "1. Por nombre" << endl;
         cout << "2. Por especialidad" << endl;
+        cout << "3. Regresar" << endl;
         cout << "Opcion: ";
         cin >> option;
         switch(option){

@@ -67,12 +67,12 @@ enum {
 };
 
 enum{
-    SERVIDORES = 1,
-    ESCRITORIO,
-    PORTATILES,
-    LINUX,
+    ESCRITORIO = 1,
     IMPRESORAS,
-    REDES
+    LINUX,
+    PORTATILES,
+    REDES,
+    SERVIDORES
 };
 
 enum{

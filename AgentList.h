@@ -11,9 +11,10 @@ private:
     AgentNode* header;
     bool isValidPos(AgentNode* agent);
     void copyAll(const AgentList &agentList);
-    void swapPtr(AgentNode* agent1, AgentNode* agent2);
-    void sortByName(AgentNode* agent1, AgentNode* agent2);
-    void sortBySpecialty(AgentNode* agent1, AgentNode* agent2);
+    AgentNode* mergeName(AgentNode* first, AgentNode* second);
+    AgentNode* mergeSpecialty(AgentNode* first, AgentNode* second);
+    AgentNode* mergeSort(AgentNode* head, int option);
+    AgentNode* split(AgentNode* head);
 public:
     //CONSTRUCTORS
     AgentList();
