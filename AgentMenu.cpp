@@ -456,7 +456,38 @@ void AgentMenu::searchAgent() {
 }
 
 void AgentMenu::sortAgents() {
+    bool terminate = false;
+    int option = 0;
 
+    do{
+        system(CLEAR);
+        cout << "ORGANIZAR AGENTES" << endl;
+        cout << "1. Por nombre" << endl;
+        cout << "2. Por especialidad" << endl;
+        cout << "Opcion: ";
+        cin >> option;
+        switch(option){
+            case SORT_NAME: {
+                agentListRef->sortByName();
+                terminate = true;
+                break;
+            }
+            case SORT_SPECIALTY: {
+                agentListRef->sortBySpecialty();
+                terminate = true;
+                break;
+            }
+            case EXIT_SORT: {
+                terminate = true;
+                break;
+            }
+            default: {
+                cout << "seleccione una opcion valida" << endl;
+                getchar();
+                enterToContinue();
+            }
+        }
+    }while(!terminate);
 }
 
 void AgentMenu::printAgent(AgentNode* agentNode) {

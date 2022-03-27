@@ -75,5 +75,11 @@ enum{
     REDES
 };
 
+enum{
+    SORT_NAME = 1,
+    SORT_SPECIALTY,
+    EXIT_SORT
+};
+
 
 #endif //PROGRAMA_AGENTMENU_H
