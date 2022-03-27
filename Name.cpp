@@ -46,15 +46,15 @@ bool Name::operator!=(const Name &name) {
 }
 
 bool Name::operator<(const Name &name) {
-    return name.lastName < lastName;
+    return name.firstName < firstName;
 }
 
 bool Name::operator<=(const Name &name) {
-    return name.lastName <= lastName;
+    return name.firstName <= firstName;
 }
 
 bool Name::operator>(const Name &name) {
-    return name.lastName > lastName;
+    return name.firstName > firstName;
 }
 
 bool Name::operator>=(const Name &name) {
