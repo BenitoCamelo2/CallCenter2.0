@@ -2,7 +2,12 @@
 #define PROGRAMA_AGENTLIST_H
 
 #include <iostream>
+#include <fstream>
+#include <string>
+
 #include "AgentNode.h"
+
+
 
 using namespace std;
 
@@ -46,8 +51,28 @@ public:
     //delets all agents
     void deleteAll();
     //read-write to disk
-    void writeToDisk(const string& data);
-    string readFromDisk();
+    void writeToDisk(const string& fileName);
+    AgentList* readFromDisk();
+};
+
+enum{
+    READ_CODE = 0,
+    READ_NAME,
+    READ_TIME_START,
+    READ_TIME_END,
+    READ_EXTENSION,
+    READ_EXTRA_HOURS,
+    READ_SPECIALTY
+};
+
+enum{
+    READ_FIRST_NAME = 0,
+    READ_LAST_NAME
+};
+
+enum{
+    READ_HOUR_AGENT = 0,
+    READ_MINUTE_AGENT
 };
 
 

@@ -57,11 +57,11 @@ string Client::toString(){
     string result;
 
     result = phoneNumber;
-    result += " | ";
+    result += "|";
     result += callStart.toString();
-    result += " | ";
+    result += "|";
     result += callDuration.toString();
-    result += " | ";
+    result += "|";
     result += callDate.toString();
 
     return result;

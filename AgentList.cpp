@@ -328,11 +328,14 @@ void AgentList::sortBySpecialty() {
 
 string AgentList::toString() {
     AgentNode* temp(header);
+    AgentNode* last(getLastPos());
     string result;
 
     while(temp != nullptr){
         result += temp->getData().toString();
-        result += "\n";
+        if(temp != last) {
+            result += "\n";
+        }
 
         temp = getNextPos(temp);
     }
@@ -351,10 +354,200 @@ void AgentList::deleteAll() {
     header = nullptr;
 }
 
-void AgentList::writeToDisk(const string &data) {
+void AgentList::writeToDisk(const string &fileName) {
+    ofstream file;
 
+    file.open(fileName, ios::out);
+    if(!file.is_open()){
+        throw ListException("No se pudo abrir el archivo");
+    } else {
+        file << toString();
+        file.close();
+        AgentNode* temp(header);
+
+        while(temp != nullptr){
+            temp->getData().getClientList()->writeToDisk(temp->getData().getCode() + ".txt");
+            temp = temp->getNext();
+        }
+    }
 }
 
-string AgentList::readFromDisk() {
-    return "";
+AgentList* AgentList::readFromDisk() {
+    AgentList* tempAgentList = new AgentList();
+    ClientList* tempClientList = new ClientList();
+
+    string fileName = AGENT_FILE_NAME;
+    string tempLine;
+    char c;
+    ifstream file(fileName);
+
+    int i=0, j=0;
+
+    if(!file.is_open()){
+        cout << "No se pudo abrir el archivo, creando uno nuevo" << endl;
+        cout << "La lista de agentes estara vacia" << endl;
+        cout << "Presione una tecla para continuar..." << endl;
+        getchar();
+        ofstream fileOpen(fileName, ios::out);
+        file.close();
+        return nullptr;
+    }
+
+    while(!file.eof()){
+        Agent tempAgent;
+
+        string code;
+        string firstName, lastName;
+        string hourStartStr, minuteStartStr, hourEndStr, minuteEndStr;
+        string extensionStr;
+        string extraHoursStr;
+        string specialtyStr;
+
+        Name name;
+
+        int hourStartInt, minuteStartInt, hourEndInt, minuteEndInt;
+        Time timeStart, timeEnd;
+
+        int extensionInt;
+        int extraHoursInt;
+        int specialtyInt;
+
+        int nameCounter = 0;
+        int timeStartCounter = 0;
+        int timeEndCounter = 0;
+
+        j=0;
+
+        getline(file, tempLine);
+        for(i = 0; i < tempLine.length(); i++){
+            c = tempLine[i];
+            if(c == '|'){
+                if(j == READ_SPECIALTY){
+                    break;
+                }
+                i++;
+                j++;
+                c = tempLine[i];
+            }
+            switch(j){
+                case READ_CODE: {
+                    code += c;
+                    break;
+                }
+                case READ_NAME: {
+                    if(c == ' '){
+                        if(nameCounter == READ_LAST_NAME){
+                            break;
+                        }
+                        i++;
+                        nameCounter++;
+                        c = tempLine[i];
+                    }
+                    switch(nameCounter){
+                        case READ_FIRST_NAME: {
+                            firstName += c;
+                            break;
+                        }
+                        case READ_LAST_NAME: {
+                            lastName += c;
+                            break;
+                        }
+                        default: {
+                            throw ListException("Error al leer nombre de un agente");
+                        }
+                    }
+                    break;
+                }
+                case READ_TIME_START: {
+                    if(c == ':'){
+                        if(timeStartCounter == READ_MINUTE_AGENT){
+                            break;
+                        }
+                        i++;
+                        timeStartCounter++;
+                        c = tempLine[i];
+                    }
+                    switch(timeStartCounter){
+                        case READ_HOUR_AGENT: {
+                            hourStartStr += c;
+                            break;
+                        }
+                        case READ_MINUTE_AGENT: {
+                            minuteStartStr += c;
+                            break;
+                        }
+                        default: {
+                            throw ListException("Error al leer tiempo de un agente");
+                        }
+                    }
+                    break;
+                }
+                case READ_TIME_END: {
+                    if(c == ':'){
+                        if(timeEndCounter == READ_MINUTE_AGENT){
+                            break;
+                        }
+                        i++;
+                        timeEndCounter++;
+                        c = tempLine[i];
+                    }
+                    switch(timeEndCounter){
+                        case READ_HOUR_AGENT: {
+                            hourEndStr += c;
+                            break;
+                        }
+                        case READ_MINUTE_AGENT: {
+                            minuteEndStr += c;
+                            break;
+                        }
+                        default: {
+                            throw ListException("Error al leer tiempo de un agente");
+                        }
+                    }
+                    break;
+                }
+                case READ_EXTENSION: {
+                    extensionStr += c;
+                    break;
+                }
+                case READ_EXTRA_HOURS: {
+                    extraHoursStr += c;
+                    break;
+                }
+                case READ_SPECIALTY: {
+                    specialtyStr += c;
+                    break;
+                }
+                default: {
+                    throw ListException("Error al leer un agente");
+                }
+            }
+        }
+
+        name.setData(firstName, lastName);
+
+        hourStartInt = atoi(hourStartStr.data());
+        minuteStartInt = atoi(minuteStartStr.data());
+        timeStart.setData(hourStartInt, minuteStartInt);
+
+        hourEndInt = atoi(hourEndStr.data());
+        minuteEndInt = atoi(minuteEndStr.data());
+        timeEnd.setData(hourEndInt, minuteEndInt);
+
+        extensionInt = atoi(extensionStr.data());
+
+        extraHoursInt = atoi(extraHoursStr.data());
+
+        specialtyInt = atoi(specialtyStr.data());
+
+        tempAgent.setData(code, name, timeStart, timeEnd, extensionInt, extraHoursInt, specialtyInt);
+        tempClientList = tempClientList->readFromDisk(code + ".txt");
+        if(tempClientList == nullptr){
+            tempClientList = new ClientList();
+        }
+        tempAgent.setClientList(tempClientList);
+
+        tempAgentList->insertData(tempAgentList->getFirstPos(), tempAgent);
+    }
+    return tempAgentList;
 }

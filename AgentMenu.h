@@ -2,6 +2,8 @@
 #define PROGRAMA_AGENTMENU_H
 
 #include <iostream>
+#include <cstdio>
+#include <cstring>
 
 #include "AgentList.h"
 
@@ -51,6 +53,7 @@ enum{
     SORT_AGENTS,
     SHOW_AGENTS,
     DELETE_ALL_AGENTS,
+    SAVE_CHANGES,
     EXIT_AGENT
 };
 

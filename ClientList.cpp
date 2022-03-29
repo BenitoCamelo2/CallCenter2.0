@@ -29,11 +29,14 @@ bool ClientList::isEmpty() {
 
 string ClientList::toString() {
     ClientNode* temp(header);
+    ClientNode* last(getLastPos());
     string result;
 
     while(temp != nullptr){
         result += temp->getData().toString();
-        result += "\n";
+        if(temp != last) {
+            result += "\n";
+        }
 
         temp = getNextPos(temp);
     }
@@ -306,9 +309,161 @@ void ClientList::deleteAll() {
     }
 }
 
-void ClientList::writeToDisk(const string data) {
+void ClientList::writeToDisk(const string& fileName) {
+    ofstream file;
+    file.open(fileName, ios::out);
+    if(!file.is_open()){
+        throw ListException("No se pudo abrir o crear el archivo");
+    } else {
+        file << toString();
+        file.close();
+    }
 }
 
-string ClientList::readFromDisk() {
-    return "";
+ClientList* ClientList::readFromDisk(const string& fileName) {
+    ClientList* tempClientList = new ClientList();
+
+    string tempLine;
+    char c;
+    ifstream file(fileName);
+
+    int i=0, j=0;
+
+    if(!file.is_open()){
+        return nullptr;
+    }
+
+    while(!file.eof()){
+        Client tempClient;
+
+        string phoneNumber;
+        string hourCallStartStr, minuteCallStartStr, hourCallDurationStr, minuteCallDurationStr;
+        string yearCallStr, monthCallStr, dayCallStr;
+
+        int yearCallInt, monthCallInt, dayCallInt;
+
+        Date callDate;
+
+        int hourCallStartInt, minuteCallStartInt, hourCallDurationInt, minuteCallDurationInt;
+
+        Time callStart, callDuration;
+
+        j=0;
+
+        int callStartCounter = 0;
+        int callDurationCounter = 0;
+        int dateCounter = 0;
+
+        getline(file, tempLine);
+        for(i = 0; i < tempLine.length(); i++){
+            c = tempLine[i];
+            if(c == '|'){
+                if(j == READ_CALL_DATE){
+                    break;
+                }
+                i++;
+                j++;
+                c = tempLine[i];
+            }
+            switch(j){
+                case READ_PHONE_NUMBER: {
+                    phoneNumber += c;
+                    break;
+                }
+                case READ_CALL_START: {
+                    if(c == ':'){
+                        if(callStartCounter == READ_MINUTE_CLIENT){
+                            break;
+                        }
+                        i++;
+                        callStartCounter++;
+                        c = tempLine[i];
+                    }
+                    switch(callStartCounter){
+                        case READ_HOUR_CLIENT: {
+                            hourCallStartStr += c;
+                            break;
+                        }
+                        case READ_MINUTE_CLIENT: {
+                            minuteCallStartStr += c;
+                            break;
+                        }
+                        default: {
+                            throw ListException("Error en lectura de inicio de llamada de un cliente");
+                        }
+                    }
+                    break;
+                }
+                case READ_CALL_DURATION: {
+                    if(c == ':'){
+                        if(callDurationCounter == READ_MINUTE_CLIENT){
+                            break;
+                        }
+                        i++;
+                        callDurationCounter++;
+                        c = tempLine[i];
+                    }
+                    switch(callDurationCounter){
+                        case READ_HOUR_CLIENT: {
+                            hourCallDurationStr += c;
+                            break;
+                        }
+                        case READ_MINUTE_CLIENT: {
+                            minuteCallDurationStr += c;
+                            break;
+                        }
+                        default: {
+                            throw ListException("Error en lectura de llamada duracion de un cliente");
+                        }
+                    }
+                    break;
+                }
+                case READ_CALL_DATE: {
+                    if(c == '/'){
+                        if(dateCounter == READ_YEAR){
+                            break;
+                        }
+                        i++;
+                        dateCounter++;
+                        c = tempLine[i];
+                    }
+                    switch(dateCounter){
+                        case READ_DAY: {
+                            dayCallStr += c;
+                            break;
+                        }
+                        case READ_MONTH: {
+                            monthCallStr += c;
+                            break;
+                        }
+                        case READ_YEAR: {
+                            yearCallStr += c;
+                            break;
+                        }
+                        default: {
+                            throw ListException("Error en lectura de la fecha de llamada de un cliente");
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+        hourCallStartInt = atoi(hourCallStartStr.data());
+        minuteCallStartInt = atoi(minuteCallStartStr.data());
+        callStart.setData(hourCallStartInt, minuteCallStartInt);
+
+        hourCallDurationInt = atoi(hourCallDurationStr.data());
+        minuteCallDurationInt = atoi(minuteCallDurationStr.data());
+        callDuration.setData(hourCallDurationInt, minuteCallDurationInt);
+
+        yearCallInt = atoi(yearCallStr.data());
+        monthCallInt = atoi(monthCallStr.data());
+        dayCallInt = atoi(dayCallStr.data());
+        callDate.setData(yearCallInt, monthCallInt, dayCallInt);
+
+        tempClient.setData(phoneNumber, callStart, callDuration, callDate);
+        tempClientList->insertOrdered(tempClient);
+    }
+    return tempClientList;
 }

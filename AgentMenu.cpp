@@ -11,6 +11,10 @@
 #endif
 
 AgentMenu::AgentMenu(AgentList* agentList): agentListRef(agentList) {
+    agentListRef = agentListRef->readFromDisk();
+    if(agentListRef == nullptr){
+        agentListRef = new AgentList();
+    }
     mainAgentMenu();
 }
 
@@ -122,6 +126,7 @@ void AgentMenu::deleteAgent() {
     //only searches by code
     string code;
     bool terminate = false;
+    int n;
 
     system(CLEAR);
     cout << "ELIMINAR AGENTE" << endl << endl;
@@ -142,8 +147,13 @@ void AgentMenu::deleteAgent() {
             terminate = true;
         }
     }while(!terminate);
+
+    code += ".txt";
+
+    std::remove(code.data());
     //deletes the node
     agentListRef->deleteData(agentNode);
+
 }
 
 void AgentMenu::modifyAgent() {
@@ -555,11 +565,12 @@ void AgentMenu::printAgents(char option) {
 
     //makes sure there is at least 1 agent, or else it breaks
     if(temp != nullptr) {
-        //prints the first line of the list, which shows the categories
-        cout << "-----------------------------------------------------------------------------------------------" << endl;
-        agentListHeader();
+
         //in this case there is only one element in the list
         if (temp == last) {
+            //prints the first line of the list, which shows the categories
+            cout << "-----------------------------------------------------------------------------------------------" << endl;
+            agentListHeader();
             if(option == 's' || option == 'S'){
                 printAgent(temp);
                 if(temp->getData().getClientList()->getFirstPos() != nullptr) {
@@ -577,6 +588,8 @@ void AgentMenu::printAgents(char option) {
         } else {
             if(option == 's' || option == 'S'){
                 while (temp != nullptr) {
+                    //prints the first line of the list, which shows the categories
+                    cout << "-----------------------------------------------------------------------------------------------" << endl;
                     agentListHeader();
                     printAgent(temp);
                     if(temp->getData().getClientList()->getFirstPos() != nullptr) {
@@ -591,6 +604,9 @@ void AgentMenu::printAgents(char option) {
                 }
 
             } else {
+                //prints the first line of the list, which shows the categories
+                cout << "-----------------------------------------------------------------------------------------------" << endl;
+                agentListHeader();
                 while (temp != nullptr) {
                     printAgent(temp);
                     temp = temp->getNext();
@@ -640,7 +656,8 @@ void AgentMenu::mainAgentMenu() {
         cout << "5. Organizar agentes" << endl;
         cout << "6. Mostrar los agentes" << endl;
         cout << "7. Eliminar TODOS los agentes" << endl;
-        cout << "8. Regresar" << endl;
+        cout << "8. Guardar cambios" << endl;
+        cout << "9. Salir" << endl;
         cout << "Option: ";
         cin >> option;
         switch(option){
@@ -683,6 +700,10 @@ void AgentMenu::mainAgentMenu() {
                     cin.ignore();
                     enterToContinue();
                 }
+                break;
+            }
+            case SAVE_CHANGES: {
+                agentListRef->writeToDisk("agentdata.txt");
                 break;
             }
             case EXIT_AGENT: {

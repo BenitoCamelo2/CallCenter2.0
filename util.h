@@ -5,6 +5,8 @@
 #ifndef PROGRAMA_UTIL_H
 #define PROGRAMA_UTIL_H
 
+#define AGENT_FILE_NAME "agentdata.txt"
+
 enum opcionesSplash{
     SPLASH_AGENTE=1,
     SPLASH_CLIENTE,

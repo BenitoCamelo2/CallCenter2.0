@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
 
 #include "ClientNode.h"
 #include "ListException.h"
@@ -44,8 +45,8 @@ public:
     //deletes all the nodes in the list
     void deleteAll();
     //read-write to disk
-    void writeToDisk(string data);
-    string readFromDisk();
+    void writeToDisk(const string& fileName);
+    ClientList* readFromDisk(const string& fileName);
 };
 
 enum{
@@ -55,5 +56,22 @@ enum{
     SEARCH_BY_CALLDURATION,
 };
 
+enum{
+    READ_PHONE_NUMBER = 0,
+    READ_CALL_START,
+    READ_CALL_DURATION,
+    READ_CALL_DATE
+};
+
+enum{
+    READ_YEAR = 0,
+    READ_MONTH,
+    READ_DAY
+};
+
+enum{
+    READ_HOUR_CLIENT = 0,
+    READ_MINUTE_CLIENT
+};
 
 #endif //PROGRAMA_CLIENTLIST_H
