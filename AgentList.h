@@ -7,8 +7,6 @@
 
 #include "AgentNode.h"
 
-
-
 using namespace std;
 
 class AgentList {
