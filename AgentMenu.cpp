@@ -101,6 +101,12 @@ void AgentMenu::addAgent() {
     }
 
     //specialty
+    cout << "1: Escritorio" << endl;
+    cout << "2: Impresoras" << endl;
+    cout << "3: Linux" << endl;
+    cout << "4: Portatiles" << endl;
+    cout << "5: Redes" << endl;
+    cout << "6: Servidores" << endl;
     cout << "Especialidad (1, 2, 3, 4, 5, 6): ";
     cin >> specialty;
     while(!verifyINT(1, 6, specialty)){
