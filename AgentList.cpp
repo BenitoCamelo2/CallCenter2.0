@@ -384,10 +384,6 @@ AgentList* AgentList::readFromDisk() {
     int i=0, j=0;
 
     if(!file.is_open()){
-        cout << "No se pudo abrir el archivo, creando uno nuevo" << endl;
-        cout << "La lista de agentes estara vacia" << endl;
-        cout << "Presione una tecla para continuar..." << endl;
-        getchar();
         ofstream fileOpen(fileName, ios::out);
         file.close();
         return nullptr;
