@@ -324,10 +324,7 @@ ClientList* ClientList::readFromDisk(const string& fileName) {
     ClientList* tempClientList = new ClientList();
 
     string tempLine;
-    char c;
     ifstream file(fileName);
-
-    int i=0, j=0;
 
     if(!file.is_open()){
         return nullptr;
@@ -337,133 +334,39 @@ ClientList* ClientList::readFromDisk(const string& fileName) {
         Client tempClient;
 
         string phoneNumber;
-        string hourCallStartStr, minuteCallStartStr, hourCallDurationStr, minuteCallDurationStr;
-        string yearCallStr, monthCallStr, dayCallStr;
-
-        int yearCallInt, monthCallInt, dayCallInt;
+        int yearCall, monthCall, dayCall;
+        int hourCall, minuteCall;
 
         Date callDate;
-
-        int hourCallStartInt, minuteCallStartInt, hourCallDurationInt, minuteCallDurationInt;
-
         Time callStart, callDuration;
 
-        j=0;
+        getline(file, tempLine, '|');
+        if(!tempLine.empty()) {
+            phoneNumber = tempLine;
 
-        int callStartCounter = 0;
-        int callDurationCounter = 0;
-        int dateCounter = 0;
+            getline(file, tempLine, ':');
+            hourCall = atoi(tempLine.data());
+            getline(file, tempLine, '|');
+            minuteCall = atoi(tempLine.data());
+            callStart.setData(hourCall, minuteCall);
 
-        getline(file, tempLine);
-        for(i = 0; i < tempLine.length(); i++){
-            c = tempLine[i];
-            if(c == '|'){
-                if(j == READ_CALL_DATE){
-                    break;
-                }
-                i++;
-                j++;
-                c = tempLine[i];
-            }
-            switch(j){
-                case READ_PHONE_NUMBER: {
-                    phoneNumber += c;
-                    break;
-                }
-                case READ_CALL_START: {
-                    if(c == ':'){
-                        if(callStartCounter == READ_MINUTE_CLIENT){
-                            break;
-                        }
-                        i++;
-                        callStartCounter++;
-                        c = tempLine[i];
-                    }
-                    switch(callStartCounter){
-                        case READ_HOUR_CLIENT: {
-                            hourCallStartStr += c;
-                            break;
-                        }
-                        case READ_MINUTE_CLIENT: {
-                            minuteCallStartStr += c;
-                            break;
-                        }
-                        default: {
-                            throw ListException("Error en lectura de inicio de llamada de un cliente");
-                        }
-                    }
-                    break;
-                }
-                case READ_CALL_DURATION: {
-                    if(c == ':'){
-                        if(callDurationCounter == READ_MINUTE_CLIENT){
-                            break;
-                        }
-                        i++;
-                        callDurationCounter++;
-                        c = tempLine[i];
-                    }
-                    switch(callDurationCounter){
-                        case READ_HOUR_CLIENT: {
-                            hourCallDurationStr += c;
-                            break;
-                        }
-                        case READ_MINUTE_CLIENT: {
-                            minuteCallDurationStr += c;
-                            break;
-                        }
-                        default: {
-                            throw ListException("Error en lectura de llamada duracion de un cliente");
-                        }
-                    }
-                    break;
-                }
-                case READ_CALL_DATE: {
-                    if(c == '/'){
-                        if(dateCounter == READ_YEAR){
-                            break;
-                        }
-                        i++;
-                        dateCounter++;
-                        c = tempLine[i];
-                    }
-                    switch(dateCounter){
-                        case READ_DAY: {
-                            dayCallStr += c;
-                            break;
-                        }
-                        case READ_MONTH: {
-                            monthCallStr += c;
-                            break;
-                        }
-                        case READ_YEAR: {
-                            yearCallStr += c;
-                            break;
-                        }
-                        default: {
-                            throw ListException("Error en lectura de la fecha de llamada de un cliente");
-                        }
-                    }
-                    break;
-                }
-            }
+            getline(file, tempLine, ':');
+            hourCall = atoi(tempLine.data());
+            getline(file, tempLine, '|');
+            minuteCall = atoi(tempLine.data());
+            callDuration.setData(hourCall, minuteCall);
+
+            getline(file, tempLine, '/');
+            yearCall = atoi(tempLine.data());
+            getline(file, tempLine, '/');
+            monthCall = atoi(tempLine.data());
+            getline(file, tempLine);
+            dayCall = atoi(tempLine.data());
+            callDate.setData(yearCall, monthCall, dayCall);
+
+            tempClient.setData(phoneNumber, callStart, callDuration, callDate);
+            tempClientList->insertOrdered(tempClient);
         }
-
-        hourCallStartInt = atoi(hourCallStartStr.data());
-        minuteCallStartInt = atoi(minuteCallStartStr.data());
-        callStart.setData(hourCallStartInt, minuteCallStartInt);
-
-        hourCallDurationInt = atoi(hourCallDurationStr.data());
-        minuteCallDurationInt = atoi(minuteCallDurationStr.data());
-        callDuration.setData(hourCallDurationInt, minuteCallDurationInt);
-
-        yearCallInt = atoi(yearCallStr.data());
-        monthCallInt = atoi(monthCallStr.data());
-        dayCallInt = atoi(dayCallStr.data());
-        callDate.setData(yearCallInt, monthCallInt, dayCallInt);
-
-        tempClient.setData(phoneNumber, callStart, callDuration, callDate);
-        tempClientList->insertOrdered(tempClient);
     }
     return tempClientList;
 }

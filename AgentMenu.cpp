@@ -101,12 +101,6 @@ void AgentMenu::addAgent() {
     }
 
     //specialty
-    cout << "1: Escritorio" << endl;
-    cout << "2: Impresoras" << endl;
-    cout << "3: Linux" << endl;
-    cout << "4: Portatiles" << endl;
-    cout << "5: Redes" << endl;
-    cout << "6: Servidores" << endl;
     cout << "Especialidad (1, 2, 3, 4, 5, 6): ";
     cin >> specialty;
     while(!verifyINT(1, 6, specialty)){
@@ -649,6 +643,7 @@ void AgentMenu::printClients(AgentNode* agentNode){
 
 void AgentMenu::mainAgentMenu() {
     bool terminate = false;
+    bool saveChanges = false;
 
     //prints the agent menu
     do{
@@ -670,14 +665,17 @@ void AgentMenu::mainAgentMenu() {
         //user chooses an option
             case ADD_AGENT: {
                 addAgent();
+                saveChanges = true;
                 break;
             }
             case DELETE_AGENT: {
                 deleteAgent();
+                saveChanges = true;
                 break;
             }
             case MODIFY_AGENT: {
                 modifyAgent();
+                saveChanges = true;
                 break;
             }
             case SEARCH_AGENT: {
@@ -686,6 +684,7 @@ void AgentMenu::mainAgentMenu() {
             }
             case SORT_AGENTS: {
                 sortAgents();
+                saveChanges = true;
                 break;
             }
             case SHOW_AGENTS: {
@@ -706,13 +705,23 @@ void AgentMenu::mainAgentMenu() {
                     cin.ignore();
                     enterToContinue();
                 }
+                saveChanges = true;
                 break;
             }
             case SAVE_CHANGES: {
-                agentListRef->writeToDisk("agentdata.txt");
+                agentListRef->writeToDisk(AGENT_FILE_NAME);
+                saveChanges = false;
                 break;
             }
             case EXIT_AGENT: {
+                if(saveChanges){
+                    char c;
+                    cout << "Guste guardar los cambios? (S/N): ";
+                    cin >> c;
+                    if(c == 's' || c == 'S'){
+                        agentListRef->writeToDisk(AGENT_FILE_NAME);
+                    }
+                }
                 terminate = true;
                 break;
             }
