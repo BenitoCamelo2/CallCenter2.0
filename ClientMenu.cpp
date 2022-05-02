@@ -90,8 +90,11 @@ void ClientMenu::deleteClient() {
     ClientNode* tempClientNode;
     string phoneNumber;
 
+    system(CLEAR);
     //creation of temp client to find and delete the desired one
     cout << "ELIMINAR CLIENTE" << endl;
+    //client list header
+    clientListHeader();
     //prints client to find the client
     printClients();
     cout << "Numero telefonico: ";
@@ -161,7 +164,7 @@ void ClientMenu::modifyClient() {
         cout << "2. Fecha de la llamada" << endl;
         cout << "3. Hora inicio de la llamada" << endl;
         cout << "4. Duracion de la llamada" << endl;
-        cout << "0. Cancelar" << endl;
+        cout << "5. Regresar" << endl;
         cout << "Opcion: ";
         cin >> opc;
         switch(opc){
@@ -243,7 +246,7 @@ void ClientMenu::searchClient() {
     cout << "2. Fecha" << endl;
     cout << "3. Hora de inicio" << endl;
     cout << "4. Duracion de llamada" << endl;
-    cout << "0. Cancelar" << endl;
+    cout << "5. Regresar" << endl;
     cout << "Opcion: ";
     cin >> opc;
 

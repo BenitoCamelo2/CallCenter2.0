@@ -262,9 +262,7 @@ Client ClientList::findData(ClientNode *clientNode) {
     ClientNode* last(getLastPos());
 
     //not sure why the phoneNumber is 0, it works so i dont want to remove it
-    Client tempClient = Client();
-    tempClient.setPhoneNumber(0);
-
+    Client tempClient;
     //basic search, if its not in the list it prints doesn't exist
     if(isValidPos(clientNode)) {
         if (temp == last) {

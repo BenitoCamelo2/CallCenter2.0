@@ -346,9 +346,12 @@ void AgentList::deleteAll() {
     //deletes all while going through the list, temp gets the next element and prev deletes the previous element
     AgentNode* temp(header);
     AgentNode* prev;
+    string tempString;
     while(temp != nullptr){
         prev = temp;
         temp = getNextPos(temp);
+        tempString = prev->getData().getCode() + ".txt";
+        remove(tempString.data());
         delete prev;
     }
     header = nullptr;
