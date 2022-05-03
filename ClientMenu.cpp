@@ -65,12 +65,12 @@ void ClientMenu::addClient() {
     }
 
     //register of the call date, with verification
-    cout << "Anio de llamada: ";
-    cin >> year;
-    cout << "Mes de llamada: ";
-    cin >> month;
     cout << "Dia de llamada: ";
     cin >> day;
+    cout << "Mes de llamada: ";
+    cin >> month;
+    cout << "Anio de llamada: ";
+    cin >> year;
     while(!clientCallDate.setData(year, month, day)){
         cout << "Ingresa de nuevo" << endl;
         cout << "Anio de llamada: ";
